@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Profile\AdminProfileController;
 
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
+use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,13 @@ Route::prefix('v1')->group(function(){
             //Profile
             Route::get('/profile', [AdminProfileController::class,'show']);
             Route::put('/profile', [AdminProfileController::class, 'update']);
+
+            //Location
+            Route::get('/locations', [AdminLocationController::class, 'index']);
+            Route::post('/locations', [AdminLocationController::class, 'store']);
+            Route::get('/locations/{location:slug}', [AdminLocationController::class, 'show']);
+            Route::put('/locations/{location:slug}', [AdminLocationController::class, 'update']);
+            Route::delete('/locations/{location:slug}', [AdminLocationController::class, 'destroy']);
 
             //User
             Route::get('/users', [AdminUserController::class, 'index']);
