@@ -4,16 +4,12 @@ use App\Http\Controllers\Api\V1\Admin\AdminAdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\Admin\AdminAuthController;
 use App\Http\Controllers\Api\V1\Auth\Admin\AdminPasswordController;
-use App\Http\Controllers\Api\V1\ArticleCategory\AdminArticleCategoryController;
 use App\Http\Controllers\Api\V1\Profile\AdminProfileController;
-use App\Http\Controllers\Api\V1\ArticleAuthor\AdminArticleAuthorController;
-use App\Http\Controllers\Api\V1\Article\AdminArticleController;
 
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
-use App\Http\Controllers\Api\V1\Article\ArticleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,27 +50,6 @@ Route::prefix('v1')->group(function(){
             Route::get('/profile', [AdminProfileController::class,'show']);
             Route::put('/profile', [AdminProfileController::class, 'update']);
 
-            //ArticleAuthor
-            Route::get('/authors', [AdminArticleAuthorController::class, 'index']);
-            Route::get('/authors/{author}', [AdminArticleAuthorController::class, 'show']);
-            Route::post('/authors', [AdminArticleAuthorController::class, 'store']);
-            Route::put('/authors/{author}', [AdminArticleAuthorController::class, 'update']);
-            Route::delete('/authors/{author}', [AdminArticleAuthorController::class, 'destroy']);
-
-            //Article
-            Route::get('/articles', [AdminArticleController::class, 'index']);
-            Route::post('/articles', [AdminArticleController::class, 'store']);
-            Route::get('/articles/{article:slug}', [AdminArticleController::class, 'show']);
-            Route::put('/articles/{article:slug}', [AdminArticleController::class, 'update']);
-            Route::delete('/articles/{article:slug}', [AdminArticleController::class, 'destroy']);
-
-            //ArticleCategory
-            Route::get('/article-categories', [AdminArticleCategoryController::class, 'index']);
-            Route::post('/article-categories', [AdminArticleCategoryController::class, 'store']);
-            Route::get('/article-categories/{category:slug}', [AdminArticleCategoryController::class,'show']);
-            Route::put('/article-categories/{category:slug}', [AdminArticleCategoryController::class, 'update']);
-            Route::delete('/article-categories/{category:slug}', [AdminArticleCategoryController::class, 'destroy']);
-  
             //User
             Route::get('/users', [AdminUserController::class, 'index']);
             Route::get('/users/{user}', [AdminUserController::class, 'show']);
@@ -122,12 +97,6 @@ Route::prefix('v1')->group(function(){
     });
     
     Route::middleware('language')->group(function(){
-
-        
-        //Article
-        Route::get('/articles', [ArticleController::class, 'index']);
-        Route::get('/articles/{article:slug}', [ArticleController::class, 'show']);
-        Route::get('/top-articles', [ArticleController::class, 'topArticles']);
 
     });
 });
