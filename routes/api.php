@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Profile\AdminProfileController;
 
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
+use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
@@ -57,6 +58,13 @@ Route::prefix('v1')->group(function(){
             Route::get('/locations/{location:slug}', [AdminLocationController::class, 'show']);
             Route::put('/locations/{location:slug}', [AdminLocationController::class, 'update']);
             Route::delete('/locations/{location:slug}', [AdminLocationController::class, 'destroy']);
+
+            //Facility
+            Route::get('/facilities', [AdminFacilityController::class, 'index']);
+            Route::post('/facilities', [AdminFacilityController::class, 'store']);
+            Route::get('/facilities/{facility:slug}', [AdminFacilityController::class, 'show']);
+            Route::put('/facilities/{facility:slug}', [AdminFacilityController::class, 'update']);
+            Route::delete('/facilities/{facility:slug}', [AdminFacilityController::class, 'destroy']);
 
             //User
             Route::get('/users', [AdminUserController::class, 'index']);
