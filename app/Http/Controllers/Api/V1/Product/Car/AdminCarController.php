@@ -20,9 +20,14 @@ class AdminCarController extends Controller
         return ProductResource::collection($cars);
     }
 
-    public function show(Product $car)
+    public function show($slug)
     {
-        return new ProductResource($car->load('facilities'));
+        $car = Product::with('facilities')
+                ->where('slug', $slug)
+                ->where('type', Product::CAR_TYPE)
+                ->firstOrFail();
+
+        return new ProductResource($car);
     }
 
     public function store(CreateCarRequest $request)
@@ -52,10 +57,14 @@ class AdminCarController extends Controller
         }
     }
 
-    public function update(UpdateCarRequest $request, Product $car)
+    public function update(UpdateCarRequest $request, $slug)
     {
         try {
             DB::beginTransaction();
+
+            $car = Product::where('slug', $slug)
+                ->where('type', Product::CAR_TYPE)
+                ->firstOrFail();
 
             $car->name          = $request->name;
             $car->idr_price     = $request->idr_price;
@@ -68,7 +77,7 @@ class AdminCarController extends Controller
 
             DB::commit();
 
-            return new SuccessResource(201);
+            return new SuccessResource(200);
 
         } catch (\Throwable $th) {
 
@@ -78,10 +87,14 @@ class AdminCarController extends Controller
         }
     }
 
-    public function destroy(Product $car)
+    public function destroy($slug)
     {
         try {
             DB::beginTransaction();
+
+            $car = Product::where('slug', $slug)
+                ->where('type', Product::CAR_TYPE)
+                ->firstOrFail();
 
             $imageServices  = [];
 

@@ -71,16 +71,16 @@ Route::prefix('v1')->group(function(){
             //Car Product
             Route::get('/cars', [AdminCarController::class, 'index']);
             Route::post('/cars', [AdminCarController::class, 'store']);
-            Route::get('/cars/{car:slug}', [AdminCarController::class, 'show']);
-            Route::put('/cars/{car:slug}', [AdminCarController::class, 'update']);
-            Route::delete('/cars/{car:slug}', [AdminCarController::class, 'destroy']);
+            Route::get('/cars/{slug}', [AdminCarController::class, 'show']);
+            Route::put('/cars/{slug}', [AdminCarController::class, 'update']);
+            Route::delete('/cars/{slug}', [AdminCarController::class, 'destroy']);
 
             //Tour Product
             Route::get('/tours', [AdminTourController::class, 'index']);
             Route::post('/tours', [AdminTourController::class, 'store']);
-            Route::get('/tours/{tour:slug}', [AdminTourController::class, 'show']);
-            Route::put('/tours/{tour:slug}', [AdminTourController::class, 'update']);
-            Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy']);
+            Route::get('/tours/{slug}', [AdminTourController::class, 'show']);
+            Route::put('/tours/{slug}', [AdminTourController::class, 'update']);
+            Route::delete('/tours/{slug}', [AdminTourController::class, 'destroy']);
 
             //User
             Route::get('/users', [AdminUserController::class, 'index']);

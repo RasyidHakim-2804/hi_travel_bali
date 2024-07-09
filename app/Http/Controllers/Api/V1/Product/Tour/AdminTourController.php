@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1\Product\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Product\Tour\CreateTourRequest;
-use App\Http\Requests\Api\V1\Product\Tour\TourRequest;
 use App\Http\Requests\Api\V1\Product\Tour\UpdateTourRequest;
 use App\Http\Resources\Api\V1\Common\SuccessResource;
 use App\Http\Resources\Api\V1\Product\ProductResource;
@@ -22,12 +21,14 @@ class AdminTourController extends Controller
         return ProductResource::collection($tours);
     }
 
-    public function show(Product $tour)
+    public function show($slug)
     {
-        return new ProductResource($tour->load([
-            'translations',
-            'locations',
-        ]));
+        $tour = Product::with(['locations','translations'])
+                ->where('slug', $slug)
+                ->where('type', Product::TOUR_TYPE)
+                ->firstOrFail();
+
+        return new ProductResource($tour);
     }
 
     public function store(CreateTourRequest $request)
@@ -66,10 +67,14 @@ class AdminTourController extends Controller
         }
     }
 
-    public function update(UpdateTourRequest $request, Product $tour)
+    public function update(UpdateTourRequest $request, $slug)
     {
         try {
             DB::beginTransaction();
+
+            $tour = Product::where('slug', $slug)
+                ->where('type', Product::TOUR_TYPE)
+                ->firstOrFail();
 
             $request            = $request->validated();
 
@@ -102,10 +107,14 @@ class AdminTourController extends Controller
         }
     }
 
-    public function destroy(Product $tour)
+    public function destroy($slug)
     {
         try {
             DB::beginTransaction();
+
+            $tour = Product::where('slug', $slug)
+                ->where('type', Product::TOUR_TYPE)
+                ->firstOrFail();
 
             $imageServices  = [];
 
