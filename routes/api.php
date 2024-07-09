@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Product\Car\AdminCarController;
+use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
 use Illuminate\Support\Facades\Route;
@@ -73,6 +74,13 @@ Route::prefix('v1')->group(function(){
             Route::get('/cars/{car:slug}', [AdminCarController::class, 'show']);
             Route::put('/cars/{car:slug}', [AdminCarController::class, 'update']);
             Route::delete('/cars/{car:slug}', [AdminCarController::class, 'destroy']);
+
+            //Tour Product
+            Route::get('/tours', [AdminTourController::class, 'index']);
+            Route::post('/tours', [AdminTourController::class, 'store']);
+            Route::get('/tours/{tour:slug}', [AdminTourController::class, 'show']);
+            Route::put('/tours/{tour:slug}', [AdminTourController::class, 'update']);
+            Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy']);
 
             //User
             Route::get('/users', [AdminUserController::class, 'index']);
