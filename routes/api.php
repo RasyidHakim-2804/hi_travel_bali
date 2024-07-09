@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
+use App\Http\Controllers\Api\V1\Product\Car\AdminCarController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,13 @@ Route::prefix('v1')->group(function(){
             Route::get('/facilities/{facility:slug}', [AdminFacilityController::class, 'show']);
             Route::put('/facilities/{facility:slug}', [AdminFacilityController::class, 'update']);
             Route::delete('/facilities/{facility:slug}', [AdminFacilityController::class, 'destroy']);
+
+            //Car Product
+            Route::get('/cars', [AdminCarController::class, 'index']);
+            Route::post('/cars', [AdminCarController::class, 'store']);
+            Route::get('/cars/{car:slug}', [AdminCarController::class, 'show']);
+            Route::put('/cars/{car:slug}', [AdminCarController::class, 'update']);
+            Route::delete('/cars/{car:slug}', [AdminCarController::class, 'destroy']);
 
             //User
             Route::get('/users', [AdminUserController::class, 'index']);
