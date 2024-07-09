@@ -24,10 +24,6 @@ class ProductResource extends JsonResource
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
 
-            'facilities'    => FacilityResource::collection($this->whenLoaded('facilities')),
-
-            'locations'     => LocationResource::collection($this->whenLoaded('locations')),
-
             $this->mergeWhen($this->relationLoaded('translations'), function() {
                 $translations = [];
 
@@ -36,7 +32,13 @@ class ProductResource extends JsonResource
                 }
 
                 return $translations;
-            })
+            }),
+
+            'images'        => ProductImageResource::collection($this->whenLoaded('images')),
+
+            'facilities'    => FacilityResource::collection($this->whenLoaded('facilities')),
+
+            'locations'     => LocationResource::collection($this->whenLoaded('locations')),
         ];
     }
 }

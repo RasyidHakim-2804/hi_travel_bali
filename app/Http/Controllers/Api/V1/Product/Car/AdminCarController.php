@@ -22,7 +22,7 @@ class AdminCarController extends Controller
 
     public function show($slug)
     {
-        $car = Product::with('facilities')
+        $car = Product::with(['facilities', 'images'])
                 ->where('slug', $slug)
                 ->where('type', Product::CAR_TYPE)
                 ->firstOrFail();
@@ -98,7 +98,7 @@ class AdminCarController extends Controller
 
             $imageServices  = [];
 
-            foreach ($car->images() as $image) {
+            foreach ($car->images as $image) {
                 $imageService = new ImageService($image);
                 $imageService->delete();
                 $imageServices[] = $imageService;

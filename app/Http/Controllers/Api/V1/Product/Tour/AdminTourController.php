@@ -23,7 +23,7 @@ class AdminTourController extends Controller
 
     public function show($slug)
     {
-        $tour = Product::with(['locations','translations'])
+        $tour = Product::with(['locations','translations','images'])
                 ->where('slug', $slug)
                 ->where('type', Product::TOUR_TYPE)
                 ->firstOrFail();
@@ -118,7 +118,7 @@ class AdminTourController extends Controller
 
             $imageServices  = [];
 
-            foreach ($tour->images() as $image) {
+            foreach ($tour->images as $image) {
                 $imageService = new ImageService($image);
                 $imageService->delete();
                 $imageServices[] = $imageService;
