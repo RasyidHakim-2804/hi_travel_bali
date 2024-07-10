@@ -60,17 +60,16 @@ class Product extends Model
 
     public function thumbnailImage(): HasOne
     {
-        return $this->hasOne(ProductImage::class)->ofMany('position', 'min');
+        return $this->hasOne(ProductImage::class)->ofMany([
+            'position' => 'MIN'
+        ], function(Builder $query) {
+            $query->where('is_saved', true);
+        });
     }
 
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);
-    }
-
-    public function savedImage(): HasMany
-    {
-        return $this->hasMany(ProductImage::class)->where('is_saved', true);
     }
 
     //for tour type
@@ -80,7 +79,7 @@ class Product extends Model
         return $this->hasMany(ProductTranslation::class);
     }
 
-    public function transalate(): HasOne
+    public function translate(): HasOne
     {
         return $this->hasOne(ProductTranslation::class)->ofMany([
             'id' => 'MAX'
