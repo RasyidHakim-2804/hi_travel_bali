@@ -29,6 +29,10 @@ class ProductResource extends JsonResource
                 'price_per_km'  => $this->price_per_km,
             ]),
 
+            $this->mergeWhen($this->trip_price, [
+                'trip_price'    => $this->trip_price
+            ]),
+
             $this->mergeWhen($this->relationLoaded('translations'), function() {
                 $translations = [];
 
@@ -39,7 +43,15 @@ class ProductResource extends JsonResource
                 return $translations;
             }),
 
+            $this->mergeWhen($this->relationLoaded('translate'), function() {
+                return [
+                    'description'   => $this->translate->description,
+                ];
+            }),
+
             'images'        => ProductImageResource::collection($this->whenLoaded('images')),
+
+            'image'         => new ProductImageResource($this->whenLoaded('thumbnailImage')),
 
             'facilities'    => FacilityResource::collection($this->whenLoaded('facilities')),
 
