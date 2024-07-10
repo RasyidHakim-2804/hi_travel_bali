@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
 
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
+use App\Http\Controllers\Api\V1\Product\Tour\TourController;
 use App\Http\Controllers\Api\V1\Product\Transport\UserTransportController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
@@ -130,9 +131,6 @@ Route::prefix('v1')->group(function(){
             //password controller
             Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
 
-            //Transports
-            Route::post('/transports', [UserTransportController::class, 'list']);
-
             //User Profile
             Route::get('/profile', [UserProfileController::class,'show']);
             Route::put('/profile', [UserProfileController::class, 'update']);
@@ -142,5 +140,12 @@ Route::prefix('v1')->group(function(){
     
     Route::middleware('language')->group(function(){
 
+        //Transports
+        Route::post('/transports', [UserTransportController::class, 'list']);
+
+        //Tour
+        Route::post('/tours', [TourController::class, 'list']);
+        Route::get('/tours/{slug}', [TourController::class, 'show']);
+        Route::get('/popular-tours', [TourController::class, 'popular']);
     });
 });
