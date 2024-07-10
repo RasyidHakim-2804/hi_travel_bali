@@ -4,11 +4,13 @@ namespace App\Models;
 
 use App\Models\Image\ProductImage;
 use App\Models\Translation\ProductTranslation;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -16,9 +18,10 @@ class Product extends Model
 {
     use HasFactory, HasSlug;
 
-    public const CAR_TYPE   = 'car';
+    public const TRANSPORT_TYPE   = 'transport';
 
-    public const TOUR_TYPE  = 'tour';
+    public const TOUR_TYPE        = 'tour';
+
 
     public function getSlugOptions(): SlugOptions
     {

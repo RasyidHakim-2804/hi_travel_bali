@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class CarSeeder extends Seeder
+class TransportSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,7 +19,7 @@ class CarSeeder extends Seeder
             'id'            => 1,
             'name'          => 'Standar (Hatchback)',
             'slug'          => Str::slug('Standar (Hatchback)'),
-            'type'          => Product::CAR_TYPE,
+            'type'          => Product::TRANSPORT_TYPE,
             'max_person'    => 4,
             'price_per_km'  => 7000,
             'idr_price'     => 50000,
@@ -32,7 +32,7 @@ class CarSeeder extends Seeder
             'id'            => 2,
             'name'          => 'Mobil Keluarga (MPV)',
             'slug'          => Str::slug('Mobil Keluarga (MPV)'),
-            'type'          => Product::CAR_TYPE,
+            'type'          => Product::TRANSPORT_TYPE,
             'max_person'    => 4,
             'price_per_km'  => 7000,
             'idr_price'     => 70000,
@@ -45,7 +45,7 @@ class CarSeeder extends Seeder
             'id'            => 3,
             'name'          => 'Mobil Keluarga Besar (MPV)',
             'slug'          => Str::slug('Mobil Keluarga Besar (MPV)'),
-            'type'          => Product::CAR_TYPE,
+            'type'          => Product::TRANSPORT_TYPE,
             'max_person'    => 4,
             'price_per_km'  => 7000,
             'idr_price'     => 55000,
@@ -58,7 +58,7 @@ class CarSeeder extends Seeder
             'id'            => 4,
             'name'          => 'Eksekutif (Mini MPV)',
             'slug'          => Str::slug('Eksekutif (Mini MPV)'),
-            'type'          => Product::CAR_TYPE,
+            'type'          => Product::TRANSPORT_TYPE,
             'max_person'    => 4,
             'price_per_km'  => 7000,
             'idr_price'     => 35000,
@@ -71,7 +71,7 @@ class CarSeeder extends Seeder
             'id'            => 5,
             'name'          => 'Mobil Keluarga Eksekutif (MPV)',
             'slug'          => Str::slug('Mobil Keluarga Eksekutif (MPV)'),
-            'type'          => Product::CAR_TYPE,
+            'type'          => Product::TRANSPORT_TYPE,
             'max_person'    => 5,
             'price_per_km'  => 7000,
             'idr_price'     => 90000,
@@ -84,7 +84,7 @@ class CarSeeder extends Seeder
             'id'            => 6,
             'name'          => 'Minibus',
             'slug'          => Str::slug('Minibus'),
-            'type'          => Product::CAR_TYPE,
+            'type'          => Product::TRANSPORT_TYPE,
             'max_person'    => 10,
             'price_per_km'  => 7000,
             'idr_price'     => 60000,
@@ -97,7 +97,7 @@ class CarSeeder extends Seeder
             'id'            => 7,
             'name'          => 'Mewah (Mini MPV)',
             'slug'          => Str::slug('Mewah (Mini MPV)'),
-            'type'          => Product::CAR_TYPE,
+            'type'          => Product::TRANSPORT_TYPE,
             'max_person'    => 4,
             'price_per_km'  => 7000,
             'idr_price'     => 59000,

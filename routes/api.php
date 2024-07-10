@@ -8,11 +8,12 @@ use App\Http\Controllers\Api\V1\Profile\AdminProfileController;
 use App\Http\Controllers\Api\V1\Product\AdminProductImageController;
 use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
-use App\Http\Controllers\Api\V1\Product\Car\AdminCarController;
+use App\Http\Controllers\Api\V1\Product\Transport\AdminTransportController;
 use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
 
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
+use App\Http\Controllers\Api\V1\Product\Transport\UserTransportController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
 use Illuminate\Support\Facades\Route;
@@ -69,12 +70,12 @@ Route::prefix('v1')->group(function(){
             Route::put('/facilities/{facility}', [AdminFacilityController::class, 'update']);
             Route::delete('/facilities/{facility}', [AdminFacilityController::class, 'destroy']);
 
-            //Car Product
-            Route::get('/cars', [AdminCarController::class, 'index']);
-            Route::post('/cars', [AdminCarController::class, 'store']);
-            Route::get('/cars/{slug}', [AdminCarController::class, 'show']);
-            Route::put('/cars/{slug}', [AdminCarController::class, 'update']);
-            Route::delete('/cars/{slug}', [AdminCarController::class, 'destroy']);
+            //Transport Product
+            Route::get('/cars', [AdminTransportController::class, 'index']);
+            Route::post('/cars', [AdminTransportController::class, 'store']);
+            Route::get('/cars/{slug}', [AdminTransportController::class, 'show']);
+            Route::put('/cars/{slug}', [AdminTransportController::class, 'update']);
+            Route::delete('/cars/{slug}', [AdminTransportController::class, 'destroy']);
 
             //Tour Product
             Route::get('/tours', [AdminTourController::class, 'index']);
@@ -128,6 +129,9 @@ Route::prefix('v1')->group(function(){
 
             //password controller
             Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
+
+            //Transports
+            Route::post('/transports', [UserTransportController::class, 'list']);
 
             //User Profile
             Route::get('/profile', [UserProfileController::class,'show']);

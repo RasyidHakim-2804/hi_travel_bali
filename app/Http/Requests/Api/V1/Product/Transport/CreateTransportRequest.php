@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Api\V1\Product\Car;
+namespace App\Http\Requests\Api\V1\Product\Transport;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCarRequest extends FormRequest
+class CreateTransportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,6 @@ class UpdateCarRequest extends FormRequest
             'idr_price'             => 'required|numeric|max:100000000|min:0',
             'price_per_km'          => 'required|numeric|min:0|max:100000000',
             'max_person'            => 'required|numeric|min:1',
-            'is_active'             => 'required|boolean',
 
             'facilities'            => 'array',
             'facilities.*'          => 'numeric|distinct|exists:facilities,id'

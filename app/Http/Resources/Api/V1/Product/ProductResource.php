@@ -24,7 +24,8 @@ class ProductResource extends JsonResource
             'price'         => $this->idr_price,
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
-            $this->mergeWhen(($this->type == Product::CAR_TYPE), [
+            
+            $this->mergeWhen(($this->type == Product::TRANSPORT_TYPE), [
                 'price_per_km'  => $this->price_per_km,
             ]),
 
