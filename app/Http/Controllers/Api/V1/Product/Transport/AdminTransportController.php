@@ -15,7 +15,7 @@ class AdminTransportController extends Controller
 {
     public function index()
     {
-        $transports = Product::where('type', Product::TRANSPORT_TYPE)->paginate(25);
+        $transports = Product::transport()->paginate(25);
 
         return ProductResource::collection($transports);
     }
@@ -24,7 +24,7 @@ class AdminTransportController extends Controller
     {
         $transport = Product::with(['facilities', 'images'])
                 ->where('slug', $slug)
-                ->where('type', Product::TRANSPORT_TYPE)
+                ->transport()
                 ->firstOrFail();
 
         return new ProductResource($transport);
@@ -37,7 +37,7 @@ class AdminTransportController extends Controller
 
             $transport                = new Product();
             $transport->name          = $request->name;
-            $transport->type          = Product::TRANSPORT_TYPE;
+            $transport->type          = $transport::TRANSPORT_TYPE;
             $transport->idr_price     = $request->idr_price;
             $transport->price_per_km  = $request->price_per_km;
             $transport->max_person    = $request->max_person;
@@ -64,7 +64,7 @@ class AdminTransportController extends Controller
             DB::beginTransaction();
 
             $transport = Product::where('slug', $slug)
-                ->where('type', Product::TRANSPORT_TYPE)
+                ->transport()
                 ->firstOrFail();
 
             $transport->name          = $request->name;
@@ -95,7 +95,7 @@ class AdminTransportController extends Controller
             DB::beginTransaction();
 
             $transport = Product::where('slug', $slug)
-                ->where('type', Product::TRANSPORT_TYPE)
+                ->transport()
                 ->firstOrFail();
 
             $imageServices  = [];

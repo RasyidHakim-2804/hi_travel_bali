@@ -16,7 +16,7 @@ class AdminTourController extends Controller
 {
     public function index()
     {
-        $tours = Product::where('type', Product::TOUR_TYPE)->paginate(25);
+        $tours = Product::tour()->paginate(25);
 
         return ProductResource::collection($tours);
     }
@@ -25,7 +25,7 @@ class AdminTourController extends Controller
     {
         $tour = Product::with(['locations','translations','images'])
                 ->where('slug', $slug)
-                ->where('type', Product::TOUR_TYPE)
+                ->tour()
                 ->firstOrFail();
 
         return new ProductResource($tour);
@@ -40,7 +40,7 @@ class AdminTourController extends Controller
             $request            = $request->validated();
 
             $tour->name         = $request['name'];
-            $tour->type         = Product::TOUR_TYPE;
+            $tour->type         = $tour::TOUR_TYPE;
             $tour->max_person   = $request['max_person'];
             $tour->idr_price    = $request['idr_price'];
             $tour->save();
@@ -73,7 +73,7 @@ class AdminTourController extends Controller
             DB::beginTransaction();
 
             $tour = Product::where('slug', $slug)
-                ->where('type', Product::TOUR_TYPE)
+                ->tour()
                 ->firstOrFail();
 
             $request            = $request->validated();
@@ -113,7 +113,7 @@ class AdminTourController extends Controller
             DB::beginTransaction();
 
             $tour = Product::where('slug', $slug)
-                ->where('type', Product::TOUR_TYPE)
+                ->tour()
                 ->firstOrFail();
 
             $imageServices  = [];
