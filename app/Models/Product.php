@@ -22,6 +22,30 @@ class Product extends Model
 
     public const TOUR_TYPE        = 'tour';
 
+    public function scopeTransport(Builder $query): void
+    {
+        $query->where('type', '=', static::TRANSPORT_TYPE);
+    }
+
+    public function scopeTour(Builder $query): void
+    {
+        $query->where('type', '=', static::TOUR_TYPE);
+    }
+
+    public function scopeTripPrice(Builder $query, float $distance): void
+    {
+        $result = floor($distance);
+        $gap    = $distance - $result;
+
+        if ($gap > 0.5) {
+            $result = ceil($distance);
+        }
+
+        $query->select(
+            '*',
+            DB::raw('idr_price + (price_per_km * ' . $result . ') as trip_price')
+        );
+    }
 
     public function getSlugOptions(): SlugOptions
     {
@@ -32,10 +56,24 @@ class Product extends Model
                 ->slugsShouldBeNoLongerThan(100);
     }
 
+    //image relation
+
+    public function thumbnailImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->ofMany('position', 'min');
+    }
+
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);
     }
+
+    public function savedImage(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->where('is_saved', true);
+    }
+
+    //for tour type
 
     public function translations(): HasMany
     {
@@ -44,16 +82,22 @@ class Product extends Model
 
     public function transalate(): HasOne
     {
-        return $this->hasOne(ProductTranslation::class);
+        return $this->hasOne(ProductTranslation::class)->ofMany([
+            'id' => 'MAX'
+        ], function(Builder $query) {
+            $query->where('lang', '=', app()->getLocale());
+        });
+    }
+    
+    public function locations(): BelongsToMany
+    {
+        return $this->belongsToMany(Location::class, 'pivot_product_location',  'product_id', 'location_id');
     }
 
+    //for transport type
     public function facilities(): BelongsToMany
     {
         return $this->belongsToMany(Facility::class, 'pivot_product_facility',  'product_id', 'facility_id');
     }
 
-    public function locations(): BelongsToMany
-    {
-        return $this->belongsToMany(Location::class, 'pivot_product_location',  'product_id', 'location_id');
-    }
 }
