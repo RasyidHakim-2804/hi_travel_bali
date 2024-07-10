@@ -24,8 +24,6 @@ class AcceptLanguage
             App::setLocale('en');
         }
 
-        $request->merge(['lang' => $lang]);
-
         return $next($request);
     }
 }
