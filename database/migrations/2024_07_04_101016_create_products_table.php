@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('type');
             $table->unsignedInteger('max_person');
             $table->boolean('is_active')->default(1);
+            $table->unsignedInteger('popular')->default(0);
             $table->unsignedDecimal('idr_price', 10, 2);
             $table->timestamps();
         });
