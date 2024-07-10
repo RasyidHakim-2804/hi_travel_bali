@@ -14,7 +14,7 @@ use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 use App\Http\Controllers\Api\V1\Product\Tour\TourController;
-use App\Http\Controllers\Api\V1\Product\Transport\UserTransportController;
+use App\Http\Controllers\Api\V1\Product\Transport\TransportController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
 use Illuminate\Support\Facades\Route;
@@ -141,7 +141,7 @@ Route::prefix('v1')->group(function(){
     Route::middleware('language')->group(function(){
 
         //Transports
-        Route::post('/transports', [UserTransportController::class, 'list']);
+        Route::post('/transports', [TransportController::class, 'list']);
 
         //Tour
         Route::post('/tours', [TourController::class, 'list']);

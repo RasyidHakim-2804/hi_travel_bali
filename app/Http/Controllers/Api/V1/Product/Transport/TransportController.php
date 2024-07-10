@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class UserTransportController extends Controller
+class TransportController extends Controller
 {
     public function list(UserListRequest $request)
     {
