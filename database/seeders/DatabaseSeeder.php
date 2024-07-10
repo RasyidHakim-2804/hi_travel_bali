@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         (new FacilityTranslationSeeder)->run();
 
         // product
-        (new CarSeeder)->run();
+        (new TransportSeeder)->run();
         (new TourSeeder)->run();
 
         (new ProductTranslationSeeder)->run();
