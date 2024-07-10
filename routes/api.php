@@ -65,9 +65,9 @@ Route::prefix('v1')->group(function(){
             //Facility
             Route::get('/facilities', [AdminFacilityController::class, 'index']);
             Route::post('/facilities', [AdminFacilityController::class, 'store']);
-            Route::get('/facilities/{facility:slug}', [AdminFacilityController::class, 'show']);
-            Route::put('/facilities/{facility:slug}', [AdminFacilityController::class, 'update']);
-            Route::delete('/facilities/{facility:slug}', [AdminFacilityController::class, 'destroy']);
+            Route::get('/facilities/{facility}', [AdminFacilityController::class, 'show']);
+            Route::put('/facilities/{facility}', [AdminFacilityController::class, 'update']);
+            Route::delete('/facilities/{facility}', [AdminFacilityController::class, 'destroy']);
 
             //Car Product
             Route::get('/cars', [AdminCarController::class, 'index']);
