@@ -39,6 +39,7 @@ class AdminCarController extends Controller
             $car->name          = $request->name;
             $car->type          = Product::CAR_TYPE;
             $car->idr_price     = $request->idr_price;
+            $car->price_per_km  = $request->price_per_km;
             $car->max_person    = $request->max_person;
 
             $car->save();
@@ -68,6 +69,7 @@ class AdminCarController extends Controller
 
             $car->name          = $request->name;
             $car->idr_price     = $request->idr_price;
+            $car->price_per_km  = $request->price_per_km;
             $car->max_person    = $request->max_person;
             $car->is_active     = $request->is_active;
 

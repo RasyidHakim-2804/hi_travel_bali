@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\V1\Product;
 
 use App\Http\Resources\Api\V1\Facility\FacilityResource;
 use App\Http\Resources\Api\V1\Location\LocationResource;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,6 +24,9 @@ class ProductResource extends JsonResource
             'price'         => $this->idr_price,
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
+            $this->mergeWhen(($this->type == Product::CAR_TYPE), [
+                'price_per_km'  => $this->price_per_km,
+            ]),
 
             $this->mergeWhen($this->relationLoaded('translations'), function() {
                 $translations = [];

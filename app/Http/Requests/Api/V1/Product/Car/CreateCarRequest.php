@@ -23,7 +23,8 @@ class CreateCarRequest extends FormRequest
     {
         return [
             'name'                  => 'required|string|max:255',
-            'idr_price'             => 'required|numeric|max:100000000',
+            'idr_price'             => 'required|numeric|max:100000000|min:0',
+            'price_per_km'          => 'required|numeric|min:0|max:100000000',
             'max_person'            => 'required|numeric|min:1',
 
             'facilities'            => 'array',
