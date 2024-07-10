@@ -28,17 +28,12 @@ class AdminProductImageController extends Controller
             DB::beginTransaction();
 
             $image              = new ProductImage();
-            $lastPosition       = ProductImage::where('product_id', $product->id)
-                                    ->orderByDesc('id')
-                                    ->value('position');
 
             $imageService       = new ImageService($image);
             $result             = $imageService->upload($request->images);            
 
             $image->product_id  = $product->id;
-            $image->name        = $result->name;
             $image->path        = $result->path;
-            $image->position    = $lastPosition + 1;
             $image->is_saved    = false;
             $image->save();
 
