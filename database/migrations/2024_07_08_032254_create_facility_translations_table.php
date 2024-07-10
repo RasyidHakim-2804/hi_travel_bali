@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('facility_id')->constrained('facilities', 'id');
             $table->string('lang', 20);
-            $table->text('description');
+            $table->string('title');
             $table->timestamps();
             
             $table->foreign('lang')->references('code')->on('languages');

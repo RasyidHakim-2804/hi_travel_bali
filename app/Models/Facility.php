@@ -26,7 +26,7 @@ class Facility extends Model implements CanUploadImage
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-                ->generateSlugsFrom('name')
+                ->generateSlugsFrom('slug')
                 ->saveSlugsTo('slug')
                 ->slugsShouldBeNoLongerThan(100)
                 ->startSlugSuffixFrom(2);

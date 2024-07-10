@@ -22,10 +22,9 @@ class UpdateFacilityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'              => 'required|string|max:255',
-            'id_description'    => 'required|string|max:255',
-            'en_description'    => 'required|string|max:255',
-            'icon'              => 'image|max:2048'
+            'id_name' => 'required|string|max:255',
+            'en_name' => 'required|string|max:255',
+            'icon'    => 'image|max:2048'
         ];
     }
 }

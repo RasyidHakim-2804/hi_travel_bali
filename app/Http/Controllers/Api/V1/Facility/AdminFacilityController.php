@@ -34,21 +34,19 @@ class AdminFacilityController extends Controller
             $facility       = new Facility();
             $imageService   = new ImageService($facility);
             
-            $facility->name     = $request->name;
-            $facility->icon_url = $imageService->upload($request->icon)->path; 
+            $facility->icon_url = $imageService->upload($request->icon)->path;
+            $facility->slug     = $request->en_name;
             $facility->save();
 
-            $id_translate               = new FacilityTranslation();
-            $id_translate->lang         = 'id';
-            $id_translate->facility_id  = $facility->id;
-            $id_translate->description  = $request->id_description;
-            $id_translate->save();
+            $request = $request->validated();
 
-            $en_translate               = new FacilityTranslation();
-            $en_translate->lang         = 'en';
-            $en_translate->facility_id  = $facility->id;
-            $en_translate->description  = $request->en_description;
-            $en_translate->save();
+            foreach (['id', 'en'] as $lang) {
+                $translate              = new FacilityTranslation();
+                $translate->lang        = $lang;
+                $translate->name        = $request[$lang . '_name'];
+                $translate->facility_id = $facility->id;
+                $translate->save();
+            }
     
             DB::commit();
             
@@ -72,26 +70,23 @@ class AdminFacilityController extends Controller
             DB::beginTransaction();
 
             if ($request->has('icon')) {
-                $imageService   = new ImageService($facility);
+                $imageService       = new ImageService($facility);
                 $facility->icon_url = $imageService->upload($request->icon)->path; 
             }
-            
-            $facility->name     = $request->name;
+
+            $facility->slug     = $request->en_name;
             $facility->save();
 
-            $id_translate               = FacilityTranslation::where('facility_id', $facility->id)
-                                            ->where('lang', 'id')
+            $request    = $request->validated();
+
+            foreach (['id', 'en'] as $lang) {
+                $translate              = FacilityTranslation::where('facility_id', $facility->id)
+                                            ->where('lang', $lang)
                                             ->first();
-
-            $id_translate->description  = $request->id_description;
-            $id_translate->save();
-
-            $en_translate               = FacilityTranslation::where('facility_id', $facility->id)
-                                            ->where('lang', 'en')
-                                            ->first();
-
-            $en_translate->description  = $request->en_description;
-            $en_translate->save();
+                                            
+                $translate->name        = $request[$lang . '_name'];
+                $translate->save();
+            }
     
             DB::commit();
             
