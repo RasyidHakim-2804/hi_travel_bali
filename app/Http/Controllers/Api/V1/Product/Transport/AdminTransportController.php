@@ -7,6 +7,7 @@ use App\Http\Requests\Api\V1\Product\Transport\CreateTransportRequest;
 use App\Http\Requests\Api\V1\Product\Transport\UpdateTransportRequest;
 use App\Http\Resources\Api\V1\Common\SuccessResource;
 use App\Http\Resources\Api\V1\Product\ProductResource;
+use App\Models\Image\ProductImage;
 use App\Models\Product;
 use App\Service\Services\ImageServices\ImageService;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,7 @@ class AdminTransportController extends Controller
 
     public function show($slug)
     {
-        $transport = Product::with(['facilities', 'images'])
+        $transport = Product::with(['facilities', 'thumbnailImage'])
                 ->where('slug', $slug)
                 ->transport()
                 ->firstOrFail();
@@ -41,10 +42,11 @@ class AdminTransportController extends Controller
             $transport->idr_price     = $request->idr_price;
             $transport->price_per_km  = $request->price_per_km;
             $transport->max_person    = $request->max_person;
-
             $transport->save();
 
             $transport->facilities()->attach($request->facilities);
+
+            $imageService = $this->uploadImage($request->image, $transport->id);
 
             DB::commit();
 
@@ -53,6 +55,10 @@ class AdminTransportController extends Controller
         } catch (\Throwable $th) {
 
             DB::rollBack();
+
+            if (isset($imageService)) {
+                $imageService->rollback();
+            }
             
             throw $th;
         }
@@ -77,6 +83,10 @@ class AdminTransportController extends Controller
 
             $transport->facilities()->sync($request->facilities);
 
+            if ($request->has('image')) {
+                $imageService = $this->uploadImage($request->image, $transport->id);
+            }
+
             DB::commit();
 
             return new SuccessResource(200);
@@ -84,6 +94,10 @@ class AdminTransportController extends Controller
         } catch (\Throwable $th) {
 
             DB::rollBack();
+
+            if (isset($imageService)) {
+                $imageService->rollback();
+            }
             
             throw $th;
         }
@@ -98,15 +112,10 @@ class AdminTransportController extends Controller
                 ->transport()
                 ->firstOrFail();
 
-            $imageServices  = [];
-
-            foreach ($transport->images as $image) {
-                $imageService = new ImageService($image);
-                $imageService->delete();
-                $imageServices[] = $imageService;
-                $image->delete();
-            }
-
+                
+            $imageService = new ImageService($transport->thumbnailImage);
+            $imageService->delete();
+            $transport->thumbnailImage()->delete();
             $transport->facilities()->detach();
             $transport->delete();
 
@@ -118,14 +127,26 @@ class AdminTransportController extends Controller
             
             DB::rollBack();
 
-            if ( count($imageServices) != 0 ) {
-                foreach ($imageServices as $imageService) {
-                    $imageService->rollback();
-                }
+            if (isset($imageService)) {
+                $imageService->rollback();
             }
             
             throw $th;
         }
+    }
+
+    private function uploadImage($image, $transport_id)
+    {
+        $transportImage             = new ProductImage();
+        $imageService               = new ImageService($transportImage);
+        
+        $transportImage->product_id = $transport_id;
+        $transportImage->path       = $imageService->upload($image,'transport')->path;
+        $transportImage->position   = 1;
+        $transportImage->is_saved   = true;
+        $transportImage->save();
+
+        return $imageService;
     }
 
 }

@@ -27,6 +27,7 @@ class UpdateTransportRequest extends FormRequest
             'price_per_km'          => 'required|numeric|min:0|max:100000000',
             'max_person'            => 'required|numeric|min:1',
             'is_active'             => 'required|boolean',
+            'image'                 => 'image|max:2048',
 
             'facilities'            => 'array',
             'facilities.*'          => 'numeric|distinct|exists:facilities,id'
