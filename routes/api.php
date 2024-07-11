@@ -72,11 +72,11 @@ Route::prefix('v1')->group(function(){
             Route::delete('/facilities/{facility}', [AdminFacilityController::class, 'destroy']);
 
             //Transport Product
-            Route::get('/cars', [AdminTransportController::class, 'index']);
-            Route::post('/cars', [AdminTransportController::class, 'store']);
-            Route::get('/cars/{slug}', [AdminTransportController::class, 'show']);
-            Route::put('/cars/{slug}', [AdminTransportController::class, 'update']);
-            Route::delete('/cars/{slug}', [AdminTransportController::class, 'destroy']);
+            Route::get('/transports', [AdminTransportController::class, 'index']);
+            Route::post('/transports', [AdminTransportController::class, 'store']);
+            Route::get('/transports/{slug}', [AdminTransportController::class, 'show']);
+            Route::put('/transports/{slug}', [AdminTransportController::class, 'update']);
+            Route::delete('/transports/{slug}', [AdminTransportController::class, 'destroy']);
 
             //Tour Product
             Route::get('/tours', [AdminTourController::class, 'index']);
