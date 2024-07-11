@@ -32,6 +32,11 @@ class Product extends Model
         $query->where('type', '=', static::TOUR_TYPE);
     }
 
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('is_active', true);
+    }
+
     public function scopeTripPrice(Builder $query, float $distance): void
     {
         $result = floor($distance);

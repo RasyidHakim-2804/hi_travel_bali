@@ -25,6 +25,7 @@ class TourController extends Controller
                     'locations'
                 ])
                 ->tour()
+                ->active()
                 ->where('max_person', '>=', $request->tourist_numbers)
                 ->paginate(25);
 
@@ -40,6 +41,7 @@ class TourController extends Controller
                 ])
                 ->where('slug', $slug)
                 ->tour()
+                ->active()
                 ->firstOrFail();
 
         return new ProductResource($tour);
@@ -52,6 +54,7 @@ class TourController extends Controller
                     'locations'
                 ])
                 ->tour()
+                ->active()
                 ->orderBy('popular', 'DESC')
                 ->paginate(4);
         

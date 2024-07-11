@@ -24,8 +24,9 @@ class TransportController extends Controller
                     'thumbnailImage',
                     'facilities'
                 ])
-                ->tripPrice($request->distance)
                 ->transport()
+                ->active()
+                ->tripPrice($request->distance)
                 ->where('max_person', '>=', $request->passenger)
                 ->paginate(25);
         
