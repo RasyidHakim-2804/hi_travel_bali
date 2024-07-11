@@ -17,7 +17,7 @@ class TransportController extends Controller
         $cars = QueryBuilder::for(Product::class)
                 ->defaultSort('max_person')
                 ->allowedSorts([
-                    AllowedSort::field('price', 'idr_price'),
+                    AllowedSort::field('price', 'trip_price'),
                     AllowedSort::field('recomended', 'max_person'),
                 ])
                 ->with([
