@@ -139,9 +139,9 @@ class AdminTransportController extends Controller
         $imageService               = new ImageService($transportImage);
 
         if ($transportImage->id == null) {
-            $path = $imageService->upload($transportImage);
+            $path = $imageService->upload($image);
         } else {
-            $path = $imageService->update($transportImage);
+            $path = $imageService->update($image);
         }
         
         $transportImage->product_id = $transport->id;
