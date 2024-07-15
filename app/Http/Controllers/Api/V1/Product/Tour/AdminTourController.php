@@ -23,7 +23,7 @@ class AdminTourController extends Controller
 
     public function show($slug)
     {
-        $tour = Product::with(['locations','translations','images'])
+        $tour = Product::with(['locations','translations'])
                 ->where('slug', $slug)
                 ->tour()
                 ->firstOrFail();
@@ -47,13 +47,7 @@ class AdminTourController extends Controller
 
             $tour->locations()->attach($request['locations']);
 
-            foreach ( ['id', 'en'] as $lang) {
-                $translation                = new ProductTranslation();
-                $translation->product_id    = $tour->id;
-                $translation->lang          = $lang;
-                $translation->description   = $request[$lang . '_description'];
-                $translation->save();
-            }
+            $this->setTranslation($request, $tour->id);
 
             DB::commit();
 
@@ -86,14 +80,7 @@ class AdminTourController extends Controller
 
             $tour->locations()->sync($request['locations']);
 
-            foreach ( ['id', 'en'] as $lang) {
-                $translation                = ProductTranslation::where('lang', $lang)
-                                                ->where('product_id', $tour->id)
-                                                ->first();
-                                                
-                $translation->description   = $request[$lang . '_description'];
-                $translation->save();
-            }
+            $this->setTranslation($request, $tour->id);
 
             DB::commit();
 
@@ -116,15 +103,9 @@ class AdminTourController extends Controller
                 ->tour()
                 ->firstOrFail();
 
-            $imageServices  = [];
-
-            foreach ($tour->images as $image) {
-                $imageService = new ImageService($image);
-                $imageService->delete();
-                $imageServices[] = $imageService;
-                $image->delete();
-            }
-
+            $imageServices  = ImageService::collection($tour->images);
+            $imageServices->delete();
+            $tour->images()->delete();
             $tour->locations()->detach();
             $tour->translations()->delete();
             $tour->delete();
@@ -136,14 +117,24 @@ class AdminTourController extends Controller
         } catch (\Throwable $th) {
             
             DB::rollBack();
-
-            if ( count($imageServices) != 0 ) {
-                foreach ($imageServices as $imageService) {
-                    $imageService->rollback();
-                }
-            }
+            
+            $imageServices->rollback();
             
             throw $th;
+        }
+    }
+
+    private function setTranslation( array $request, $tour_id)
+    {
+        foreach ( ['id', 'en'] as $lang) {
+            $translation                = ProductTranslation::where('lang', $lang)
+                                            ->where('product_id', $tour_id)
+                                            ->firstOrNew();
+                                            
+            $translation->description   = $request[$lang . '_description'];
+            $translation->product_id    = $tour_id;
+            $translation->lang          = $lang;
+            $translation->save();
         }
     }
 }
