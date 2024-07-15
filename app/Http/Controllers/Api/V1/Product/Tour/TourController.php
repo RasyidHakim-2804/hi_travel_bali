@@ -39,8 +39,7 @@ class TourController extends Controller
                     'translate',
                     'images' => fn($query) => $query->where('is_saved',true)
                 ])
-                ->where('slug', $slug)
-                ->tour()
+                ->tour($slug)
                 ->active()
                 ->firstOrFail();
 

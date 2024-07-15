@@ -24,8 +24,7 @@ class AdminTransportController extends Controller
     public function show($slug)
     {
         $transport = Product::with(['facilities', 'thumbnailImage'])
-                ->where('slug', $slug)
-                ->transport()
+                ->transport($slug)
                 ->firstOrFail();
 
         return new ProductResource($transport);
@@ -46,7 +45,7 @@ class AdminTransportController extends Controller
 
             $transport->facilities()->attach($request->facilities);
 
-            $imageService = $this->uploadImage($request->image, $transport->id);
+            $imageService = $this->uploadImage($request->image, $transport);
 
             DB::commit();
 
@@ -69,9 +68,7 @@ class AdminTransportController extends Controller
         try {
             DB::beginTransaction();
 
-            $transport = Product::where('slug', $slug)
-                ->transport()
-                ->firstOrFail();
+            $transport = Product::transport($slug)->firstOrFail();
 
             $transport->name          = $request->name;
             $transport->idr_price     = $request->idr_price;
@@ -84,7 +81,7 @@ class AdminTransportController extends Controller
             $transport->facilities()->sync($request->facilities);
 
             if ($request->has('image')) {
-                $imageService = $this->uploadImage($request->image, $transport->id);
+                $imageService = $this->uploadImage($request->image, $transport);
             }
 
             DB::commit();
@@ -108,13 +105,14 @@ class AdminTransportController extends Controller
         try {
             DB::beginTransaction();
 
-            $transport = Product::where('slug', $slug)
-                ->transport()
-                ->firstOrFail();
+            $transport      = Product::transport($slug)->firstOrFail();
+            $thumbnailImage = $transport->thumbnailImage;
 
-                
-            $imageService = new ImageService($transport->thumbnailImage);
-            $imageService->delete();
+            if ($thumbnailImage != null) {
+                $imageService = new ImageService($thumbnailImage);
+                $imageService->delete();
+            }
+
             $transport->thumbnailImage()->delete();
             $transport->facilities()->detach();
             $transport->delete();
@@ -135,13 +133,13 @@ class AdminTransportController extends Controller
         }
     }
 
-    private function uploadImage($image, $transport_id)
+    private function uploadImage($image, Product $transport)
     {
-        $transportImage             = new ProductImage();
+        $transportImage             = $transport->thumbnailImage()->firstOrNew();
         $imageService               = new ImageService($transportImage);
         
-        $transportImage->product_id = $transport_id;
-        $transportImage->path       = $imageService->upload($image,'transport')->path;
+        $transportImage->product_id = $transport->id;
+        $transportImage->path       = $imageService->update($image,'transport')->path;
         $transportImage->position   = 1;
         $transportImage->is_saved   = true;
         $transportImage->save();

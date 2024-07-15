@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Product\Transport\UserListRequest;
 use App\Http\Resources\Api\V1\Product\ProductResource;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 

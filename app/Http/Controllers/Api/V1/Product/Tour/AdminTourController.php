@@ -24,8 +24,7 @@ class AdminTourController extends Controller
     public function show($slug)
     {
         $tour = Product::with(['locations','translations'])
-                ->where('slug', $slug)
-                ->tour()
+                ->tour($slug)
                 ->firstOrFail();
 
         return new ProductResource($tour);
@@ -66,9 +65,7 @@ class AdminTourController extends Controller
         try {
             DB::beginTransaction();
 
-            $tour = Product::where('slug', $slug)
-                ->tour()
-                ->firstOrFail();
+            $tour = Product::tour($slug)->firstOrFail();
 
             $request            = $request->validated();
 
@@ -99,13 +96,15 @@ class AdminTourController extends Controller
         try {
             DB::beginTransaction();
 
-            $tour = Product::where('slug', $slug)
-                ->tour()
-                ->firstOrFail();
+            $tour   = Product::tour($slug)->firstOrFail();
+            $images = $tour->images;
+            
+            if ($images != null) {
+                $imageServices  = ImageService::collection($tour->images);
+                $imageServices->delete();
+                $tour->images()->delete();
+            }
 
-            $imageServices  = ImageService::collection($tour->images);
-            $imageServices->delete();
-            $tour->images()->delete();
             $tour->locations()->detach();
             $tour->translations()->delete();
             $tour->delete();
