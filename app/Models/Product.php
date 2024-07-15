@@ -22,14 +22,22 @@ class Product extends Model
 
     public const TOUR_TYPE        = 'tour';
 
-    public function scopeTransport(Builder $query): void
+    public function scopeTransport(Builder $query, ?string $slug = null): void
     {
-        $query->where('type', '=', static::TRANSPORT_TYPE);
+        if ($slug == null) {
+            $query->where('type', '=', static::TRANSPORT_TYPE);
+        } else {
+            $query->where('type', '=', static::TRANSPORT_TYPE)->where('slug', '=', $slug);
+        }
     }
 
-    public function scopeTour(Builder $query): void
+    public function scopeTour(Builder $query, ?string $slug = null): void
     {
-        $query->where('type', '=', static::TOUR_TYPE);
+        if ($slug == null) {
+            $query->where('type', '=', static::TOUR_TYPE);
+        } else {
+            $query->where('type', '=', static::TOUR_TYPE)->where('slug', '=', $slug);
+        }
     }
 
     public function scopeActive(Builder $query): void
