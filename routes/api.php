@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\V1\Admin\AdminUserController;
 use App\Http\Controllers\Api\V1\Auth\Admin\AdminAuthController;
 use App\Http\Controllers\Api\V1\Auth\Admin\AdminPasswordController;
 use App\Http\Controllers\Api\V1\Profile\AdminProfileController;
-use App\Http\Controllers\Api\V1\Product\AdminProductImageController;
 use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Product\Transport\AdminTransportController;
@@ -13,6 +12,7 @@ use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
 
 use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
 use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
+use App\Http\Controllers\Api\V1\Product\Tour\AdminTourImageController;
 use App\Http\Controllers\Api\V1\Product\Tour\TourController;
 use App\Http\Controllers\Api\V1\Product\Transport\TransportController;
 use App\Http\Controllers\Api\V1\Profile\UserProfileController;
@@ -85,11 +85,11 @@ Route::prefix('v1')->group(function(){
             Route::put('/tours/{slug}', [AdminTourController::class, 'update']);
             Route::delete('/tours/{slug}', [AdminTourController::class, 'destroy']);
 
-            //ProductImage
-            Route::get('/products/{product:slug}/images', [AdminProductImageController::class, 'index']);
-            Route::post('/products/{product:slug}/images', [AdminProductImageController::class,'store']);
-            Route::post('/products/{product:slug}/save-images', [AdminProductImageController::class, 'saveImages']);
-            Route::delete('/products/{product:slug}/delete', [AdminProductImageController::class, 'delete']);
+            //Tour Image
+            Route::get('/products/{slug}/images', [AdminTourImageController::class, 'index']);
+            Route::post('/products/{slug}/images', [AdminTourImageController::class,'store']);
+            Route::post('/products/{slug}/save-images', [AdminTourImageController::class, 'saveImages']);
+            Route::delete('/products/{slug}/delete', [AdminTourImageController::class, 'delete']);
             
 
             //User

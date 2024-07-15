@@ -3,8 +3,6 @@
 namespace App\Http\Requests\Api\V1\Product\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use App\Models\Image\ProductImage;
 
 class DeleteImagerequest extends FormRequest
 {
@@ -26,9 +24,7 @@ class DeleteImagerequest extends FormRequest
         return [
             'image_id' => [
                 'required',
-                Rule::exists(ProductImage::class, 'id')->where(function($query){
-                    $query->where('product_id', $this->route()->parameters()['product']->id);
-                })
+                'exists:product_id,id'
             ]
         ];
     }
