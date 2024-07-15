@@ -137,9 +137,15 @@ class AdminTransportController extends Controller
     {
         $transportImage             = $transport->thumbnailImage()->firstOrNew();
         $imageService               = new ImageService($transportImage);
+
+        if ($transportImage->id == null) {
+            $path = $imageService->upload($transportImage);
+        } else {
+            $path = $imageService->update($transportImage);
+        }
         
         $transportImage->product_id = $transport->id;
-        $transportImage->path       = $imageService->update($image,'transport')->path;
+        $transportImage->path       = $path;
         $transportImage->position   = 1;
         $transportImage->is_saved   = true;
         $transportImage->save();
