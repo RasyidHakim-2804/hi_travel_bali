@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\V1\Product\Image;
+namespace App\Http\Requests\Api\V1\Product\Tour\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
 

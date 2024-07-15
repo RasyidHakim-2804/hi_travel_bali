@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Product\Tour;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Product\Image\DeleteImagerequest;
-use App\Http\Requests\Api\V1\Product\Image\SaveImageRequest;
-use App\Http\Requests\Api\V1\Product\Image\StoreImageRequest;
+use App\Http\Requests\Api\V1\Product\Tour\Image\DeleteImagerequest;
+use App\Http\Requests\Api\V1\Product\Tour\Image\SaveImageRequest;
+use App\Http\Requests\Api\V1\Product\Tour\Image\StoreImageRequest;
 use App\Http\Resources\Api\V1\Product\ProductImageResource;
 use App\Http\Resources\Api\V1\Common\SuccessResource;
 use App\Models\Product;
