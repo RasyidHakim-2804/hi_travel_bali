@@ -22,7 +22,7 @@ class SaveImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images_id'      => 'array',
+            'images_id'      => 'array|max:5',
             'images_id.*'    => [
                 'required',
                 'distinct',
