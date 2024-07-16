@@ -19,7 +19,7 @@ class AdminTourImageController extends Controller
     {
         $productTour   = Product::tour($slug)->firstOrFail();
 
-        $images = $productTour->images()->where('is_saved', '=', 1)->get();
+        $images = $productTour->images()->saved()->get();
 
         return ProductImageResource::collection($images);
     }
@@ -30,11 +30,9 @@ class AdminTourImageController extends Controller
             DB::beginTransaction();
 
             $productTour   = Product::tour($slug)->firstOrFail();
-
-            $image              = new ProductImage();
-
-            $imageService       = new ImageService($image);
-            $result             = $imageService->upload($request->images, 'tour');            
+            $image         = new ProductImage();
+            $imageService  = new ImageService($image);
+            $result        = $imageService->upload($request->images, 'tour');            
 
             $image->product_id  = $productTour->id;
             $image->path        = $result->path;
@@ -62,11 +60,8 @@ class AdminTourImageController extends Controller
         try {
             DB::beginTransaction();
 
-            $productTour   = Product::with('images')->tour($slug)->firstOrFail();
-
-            $image = ProductImage::where('id', $request->image_id)
-                        ->where('product_id', $productTour->id)
-                        ->firstOrFail();
+            $productTour = Product::tour($slug)->firstOrFail();
+            $image       = $productTour->images()->where('id', $request->image_id)->firstOrFail();
 
             $imageService = new ImageService($image);
             $imageService->delete();
@@ -93,26 +88,25 @@ class AdminTourImageController extends Controller
         try {
             DB::beginTransaction();
 
-            $productTour  = Product::tour($slug)->with('images')->firstOrFail();
-            $imagesId      = $request->validated('images_id');
-            $position      = 1;
-            $deletedImages = [];
-            
-            foreach ($productTour->images as $image) {
-                if (in_array($image->id, $imagesId)) {
-                    $image->is_saved = true;
-                    $image->position = $position;
-                    $image->save();
-        
-                    $position++;
-                } else {
-                    $deletedImages[] = $image;
-                    $image->delete();
-                }
+            $productTour  = Product::tour($slug)->firstOrFail();
+            $imagesId     = $request->validated('images_id');
+
+            for ($i = 0; $i < count($imagesId); $i++) { 
+                ProductImage::where('product_id', $productTour->id)
+                            ->where('id', $imagesId[$i])
+                            ->update([
+                                'is_saved'  => true,
+                                'position'  => $i + 1
+                            ]);
             }
             
-            $imageServices = ImageService::collection($deletedImages);
-            $imageServices->delete();
+            $unsavedImages = $productTour->images()->saved(false)->get();
+            
+            if (!$unsavedImages->isEmpty()) {
+                $imageServices = ImageService::collection($unsavedImages);
+                $imageServices->delete();
+                $productTour->images()->saved(false)->delete();
+            }
         
             DB::commit();
 

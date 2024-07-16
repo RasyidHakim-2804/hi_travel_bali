@@ -111,9 +111,9 @@ class AdminTransportController extends Controller
             if ($thumbnailImage != null) {
                 $imageService = new ImageService($thumbnailImage);
                 $imageService->delete();
+                $thumbnailImage->delete();
             }
 
-            $transport->thumbnailImage()->delete();
             $transport->facilities()->detach();
             $transport->delete();
 
