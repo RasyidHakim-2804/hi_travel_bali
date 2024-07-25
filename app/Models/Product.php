@@ -47,12 +47,7 @@ class Product extends Model
 
     public function scopeTripPrice(Builder $query, float $distance): void
     {
-        $result = floor($distance);
-        $gap    = $distance - $result;
-
-        if ($gap > 0.5) {
-            $result = ceil($distance);
-        }
+        $result = round($distance);
 
         $query->select(
             '*',
