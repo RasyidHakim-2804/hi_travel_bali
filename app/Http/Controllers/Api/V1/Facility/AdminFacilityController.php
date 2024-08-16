@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\V1\Facility;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Facility\CreateFacilityRequest;
-use App\Http\Requests\Api\V1\Facility\UpdateFacilityRequest;
-use App\Http\Resources\Api\V1\Common\SuccessResource;
-use App\Http\Resources\Api\V1\Facility\FacilityResource;
+use App\Http\Requests\Api\Facility\CreateFacilityRequest;
+use App\Http\Requests\Api\Facility\UpdateFacilityRequest;
+use App\Http\Resources\Common\SuccessResource;
+use App\Http\Resources\Facility\FacilityResource;
 use App\Models\Facility;
 use App\Models\Translation\FacilityTranslation;
 use App\Service\Services\ImageServices\ImageService;
