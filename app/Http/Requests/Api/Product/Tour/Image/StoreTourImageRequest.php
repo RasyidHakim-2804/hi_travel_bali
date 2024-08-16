@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Product\Tour\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteImagerequest extends FormRequest
+class StoreTourImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,7 @@ class DeleteImagerequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image_id' => [
-                'required',
-                'exists:product_id,id'
-            ]
+            'images'      => ['required', 'image','max:2048'],
         ];
     }
 }

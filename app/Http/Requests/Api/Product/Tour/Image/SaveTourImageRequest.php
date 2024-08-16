@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Product\Tour\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreImageRequest extends FormRequest
+class SaveTourImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,12 @@ class StoreImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images'      => ['required', 'image','max:2048'],
+            'images_id'      => 'array|max:5',
+            'images_id.*'    => [
+                'required',
+                'distinct',
+                'exists:product_images,id'
+            ],
         ];
     }
 }
