@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api\V1\Product\Transport;
+namespace App\Http\Requests\Api\Product\Transport;
 
 use Illuminate\Foundation\Http\FormRequest;
 
