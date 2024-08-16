@@ -76,8 +76,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             //Tour Image
             Route::get('/products/{slug}/images', [AdminTourImageController::class, 'index']);
             Route::post('/products/{slug}/images', [AdminTourImageController::class,'store']);
-            Route::post('/products/{slug}/save-images', [AdminTourImageController::class, 'saveImages']);
-            Route::delete('/products/{slug}/delete', [AdminTourImageController::class, 'delete']);
+            Route::post('/products/{slug}/save-images', [AdminTourImageController::class, 'save']);
 
             // Admin - Logout
             Route::post('/logout', [AuthAdminController::class, 'logout']);
