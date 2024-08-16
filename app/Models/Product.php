@@ -51,7 +51,7 @@ class Product extends Model
 
         $query->select(
             '*',
-            DB::raw('idr_price + (price_per_km * ' . $result . ') as trip_price')
+            DB::raw('price + (price_per_km * ' . $result . ') as trip_price')
         );
     }
 

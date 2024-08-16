@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(1);
             $table->unsignedInteger('popular')->default(0);
             $table->unsignedDecimal('price_per_km', 11, 2)->nullable();
-            $table->unsignedDecimal('idr_price', 11, 2);
+            $table->unsignedDecimal('price', 11, 2);
             $table->timestamps();
         });
     }
