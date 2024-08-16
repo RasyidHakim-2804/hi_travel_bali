@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Resources\Api\V1\Product;
+namespace App\Http\Resources\Product;
 
-use App\Http\Resources\Api\V1\Facility\FacilityResource;
-use App\Http\Resources\Api\V1\Location\LocationResource;
+use App\Http\Resources\Facility\FacilityResource;
+use App\Http\Resources\Location\LocationResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
