@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Image\ProductImage;
 use App\Models\Translation\ProductTranslation;
 use App\Observers\AdminActionObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
