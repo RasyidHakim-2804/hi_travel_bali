@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api\V1\Location;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Location\LocationRequest;
-use App\Http\Resources\Api\V1\Common\SuccessResource;
-use App\Http\Resources\Api\V1\Location\LocationResource;
+use App\Http\Requests\Api\Location\LocationRequest;
+use App\Http\Resources\Common\SuccessResource;
+use App\Http\Resources\Location\LocationResource;
 use App\Models\Location;
-use Illuminate\Http\Request;
 
 class AdminLocationController extends Controller
 {
