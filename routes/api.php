@@ -1,22 +1,20 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Admin\AdminAdminController;
-use App\Http\Controllers\Api\V1\Admin\AdminUserController;
-use App\Http\Controllers\Api\V1\Auth\Admin\AdminAuthController;
-use App\Http\Controllers\Api\V1\Auth\Admin\AdminPasswordController;
-use App\Http\Controllers\Api\V1\Profile\AdminProfileController;
 use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
 use App\Http\Controllers\Api\V1\Product\Transport\AdminTransportController;
 use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
 
-use App\Http\Controllers\Api\V1\Auth\User\UserAuthController;
-use App\Http\Controllers\Api\V1\Auth\User\UserPasswordController;
 use App\Http\Controllers\Api\V1\Product\Tour\AdminTourImageController;
 use App\Http\Controllers\Api\V1\Product\Tour\TourController;
 use App\Http\Controllers\Api\V1\Product\Transport\TransportController;
-use App\Http\Controllers\Api\V1\Profile\UserProfileController;
 
+use App\Http\Controllers\Api\V1\Admin\AdminController;
+use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
+use App\Http\Controllers\Api\V1\Admin\AuthAdminController;
+use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
+use App\Http\Controllers\Api\V1\Admin\AdminFeatureController;
+use App\Http\Controllers\Api\V1\Admin\ForgetAdminPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,37 +23,27 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
 
-Route::prefix('v1')->group(function(){
-    //Admin routes
-    Route::prefix('admins')->group(function (){
+Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
-        //Authentication
-        Route::post('/email-verify/confirm/{token}', [AdminAuthController::class, 'verifyEmail']);
-        Route::post('/email-verify/resend', [AdminAuthController::class, 'resendEmailVerification']);
-        Route::post('/sign-in', [AdminAuthController::class, 'login']);
+    Route::prefix('/admins')->group(function () {
 
-        //password controller
-        Route::post('/password/forget', [AdminPasswordController::class, 'forgetPassword']);
-        Route::post('/password/forget/verify-otp', [AdminPasswordController::class, 'verifyOtp']);
-        Route::post('/password/reset', [AdminPasswordController::class, 'resetPassword']);
-        Route::get('/password/forget/resend', [AdminPasswordController::class, 'forgetPassword']);
-        
-        Route::middleware(['auth:sanctum', 'verified', 'abilities:is_admin'])->group(function(){
-            
-            //Authentication
-            Route::post('/logout', [AdminAuthController::class, 'logout']);            
-            
-            //password controller
-            Route::post('/password/change', [AdminPasswordController::class, 'changePassword']);
-            
-            //Profile
-            Route::get('/profile', [AdminProfileController::class,'show']);
-            Route::put('/profile', [AdminProfileController::class, 'update']);
+        // Admin - Login
+        Route::post('/login', [AuthAdminController::class, 'login']);
+        Route::post('/resend-email-verification', [AuthAdminController::class, 'resendEmailVerification'])->middleware('throttle:limit_public_api_with_email_sending');
+        Route::post('/email-verification/{token}', [AuthAdminController::class, 'emailVerification']);
+
+        // Admin - Forget Password
+        Route::post('/forget-password', [ForgetAdminPasswordController::class, 'forgetPassword'])->middleware('throttle:limit_public_api_with_email_sending');
+        Route::post('/forget-password/verify-pin', [ForgetAdminPasswordController::class, 'verifyPin']);
+        Route::post('/forget-password/reset-password', [ForgetAdminPasswordController::class, 'resetPassword']);
+        Route::post('/verify-email-changes/{token}', AdminEmailChangesVerificationController::class);
+
+        Route::group(['middleware' => ['auth:api_admin', 'scopes:admin', 'verifyUserActive']], function(){
 
             //Location
             Route::get('/locations', [AdminLocationController::class, 'index']);
@@ -90,62 +78,32 @@ Route::prefix('v1')->group(function(){
             Route::post('/products/{slug}/images', [AdminTourImageController::class,'store']);
             Route::post('/products/{slug}/save-images', [AdminTourImageController::class, 'saveImages']);
             Route::delete('/products/{slug}/delete', [AdminTourImageController::class, 'delete']);
-            
 
-            //User
-            Route::get('/users', [AdminUserController::class, 'index']);
-            Route::get('/users/{user}', [AdminUserController::class, 'show']);
-            Route::put('/users/{user}', [AdminUserController::class, 'update']);
-                        
-            //Admin
-            Route::post('/', [AdminAdminController::class, 'store'])->middleware('ability:admin_master');
-            Route::get('/', [AdminAdminController::class,'index']);
-            Route::put('/{admin}', [AdminAdminController::class, 'update'])->middleware('ability:admin_master');
-            Route::get('/{admin}',[AdminAdminController::class, 'show']);
-        });
+            // Admin - Logout
+            Route::post('/logout', [AuthAdminController::class, 'logout']);
 
-        
-    });
-    
-    //User routes
-    Route::prefix('users')->middleware('language')->group(function(){
+            // Admin - Profile
+            Route::get('/profile', [AdminProfileController::class, 'index']);
+            Route::put('/profile', [AdminProfileController::class, 'update']);
+            Route::post('/change-password', [AdminProfileController::class, 'changePassword']);
 
-        //Authentication
-        Route::post('/register', [UserAuthController::class,'register']);
-        Route::post('/email-verify/confirm/{token}', [UserAuthController::class, 'verifyEmail']);
-        Route::post('/email-verify/resend', [UserAuthController::class, 'resendEmailVerification']);
-        Route::post('/sign-in', [UserAuthController::class, 'login']);
+            // Admin - Feature
+            Route::get('/admin-features', [AdminFeatureController::class, 'index']);
 
-        //password controller
-        Route::post('/password/forget', [UserPasswordController::class, 'forgetPassword']);
-        Route::post('/password/forget/verify-otp', [UserPasswordController::class, 'verifyOtp']);
-        Route::post('/password/reset/', [UserPasswordController::class, 'resetPassword']);
-        Route::get('/password/forget/resend', [UserPasswordController::class,'forgetPassword']);
-    
-
-        Route::middleware(['auth:sanctum','verified', 'ability:is_user'])->group(function(){
-
-            //Authentication
-            Route::post('/logout', [UserAuthController::class, 'logout']);
-
-            //password controller
-            Route::post('/password/change', [UserPasswordController::class, 'changePassword']);
-
-            //User Profile
-            Route::get('/profile', [UserProfileController::class,'show']);
-            Route::put('/profile', [UserProfileController::class, 'update']);
-            
+            // Admin - Admin
+            Route::get('', [AdminController::class, 'index']);
+            Route::get('/{admin}', [AdminController::class, 'show']);
+            Route::post('', [AdminController::class, 'store']);
+            Route::put('/{admin}', [AdminController::class, 'update']);
+            Route::delete('/{admin}', [AdminController::class, 'destroy']);
         });
     });
-    
-    Route::middleware('language')->group(function(){
 
-        //Transports
-        Route::post('/transports', [TransportController::class, 'list']);
+    //Transports
+    Route::post('/transports', [TransportController::class, 'list']);
 
-        //Tour
-        Route::post('/tours', [TourController::class, 'list']);
-        Route::get('/tours/{slug}', [TourController::class, 'show']);
-        Route::get('/popular-tours', [TourController::class, 'popular']);
-    });
+    //Tour
+    Route::post('/tours', [TourController::class, 'list']);
+    Route::get('/tours/{slug}', [TourController::class, 'show']);
+    Route::get('/popular-tours', [TourController::class, 'popular']);
 });
