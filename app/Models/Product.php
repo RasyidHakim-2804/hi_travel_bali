@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Image\ProductImage;
 use App\Models\Translation\ProductTranslation;
+use App\Observers\AdminActionObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+#[ObservedBy([AdminActionObserver::class])]
 class Product extends Model
 {
     use HasFactory, HasSlug;
