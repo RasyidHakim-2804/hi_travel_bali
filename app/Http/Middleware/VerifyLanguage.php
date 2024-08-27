@@ -2,12 +2,13 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Language;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
-class AcceptLanguage
+class VerifyLanguage
 {
     /**
      * Handle an incoming request.
@@ -16,12 +17,12 @@ class AcceptLanguage
      */
     public function handle(Request $request, Closure $next)
     {
-        $lang = $request->lang ?? 'en';
 
-        if (in_array($lang, ['en', 'id'])) {
-            App::setLocale($lang);
-        } else {
-            App::setLocale('en');
+        app()->setLocale('en');
+
+        if (in_array($request->lang, Language::code())) {
+            
+            app()->setLocale($request->lang);
         }
 
         return $next($request);
