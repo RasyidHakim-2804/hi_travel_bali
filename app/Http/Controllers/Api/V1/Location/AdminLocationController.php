@@ -20,6 +20,11 @@ class AdminLocationController extends Controller
         return LocationResource::collection($locations);
     }
 
+    public function all()
+    {
+        return LocationResource::collection(Location::all());
+    }
+
     public function show(Location $location)
     {
         return $this->successGet(
