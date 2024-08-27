@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tour_id')->nullable();
             $table->foreign('tour_id')->references('id')->on('tours')->cascadeOnDelete();
 
-            $table->string('languange', 20);
+            $table->string('language', 20);
             $table->string('field');
             $table->text('translation');
             $table->timestamps();
