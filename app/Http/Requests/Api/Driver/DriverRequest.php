@@ -33,7 +33,7 @@ class DriverRequest extends FormRequest
 
         if (strtolower($this->method()) == 'put') {
 
-            $rule['email'][] = Rule::unique('drivers')->ignore($this->route('drivers')->id);
+            $rule['email'][] = Rule::unique('drivers')->ignore($this->route('driver')->id);
         
         } else {
             $rule['email'][] = 'unique:drivers,email';
