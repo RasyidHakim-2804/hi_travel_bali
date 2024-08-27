@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Facility;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateFacilityRequest extends FormRequest
+class FacilityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +21,16 @@ class CreateFacilityRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rule = [
             'id_name'   => 'required|string|max:255',
             'en_name'   => 'required|string|max:255',
-            'icon'      => 'required|image|max:2048'
+            'image'     => 'required|image|max:2048|mimes:png,jpg'
         ];
+        
+        if (strtolower($this->method()) == 'put') {
+            $rule['image'] = 'nullable|image|max:2048|mimes:png,jpg';
+        }
+
+        return $rule;
     }
 }
