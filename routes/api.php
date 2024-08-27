@@ -2,12 +2,12 @@
 
 use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
-use App\Http\Controllers\Api\V1\Product\Transport\AdminTransportController;
+use App\Http\Controllers\Api\V1\Product\Car\AdminCarController;
 use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
 
 use App\Http\Controllers\Api\V1\Product\Tour\AdminTourImageController;
 use App\Http\Controllers\Api\V1\Product\Tour\TourController;
-use App\Http\Controllers\Api\V1\Product\Transport\TransportController;
+use App\Http\Controllers\Api\V1\Product\Car\CarController;
 
 use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminProfileController;
@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\V1\Admin\AuthAdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
 use App\Http\Controllers\Api\V1\Admin\AdminFeatureController;
 use App\Http\Controllers\Api\V1\Admin\ForgetAdminPasswordController;
+use App\Http\Controllers\Api\V1\Driver\AdminDriverController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
+
+    //Cars
+    Route::post('/transports', [CarController::class, 'list']);
+
+    //Tour
+    Route::post('/tours', [TourController::class, 'list']);
+    Route::get('/tours/{slug}', [TourController::class, 'show']);
+    Route::get('/popular-tours', [TourController::class, 'popular']);
 
     Route::prefix('/admins')->group(function () {
 
@@ -59,12 +68,20 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::put('/facilities/{facility}', [AdminFacilityController::class, 'update']);
             Route::delete('/facilities/{facility}', [AdminFacilityController::class, 'destroy']);
 
-            //Transport Product
-            Route::get('/transports', [AdminTransportController::class, 'index']);
-            Route::post('/transports', [AdminTransportController::class, 'store']);
-            Route::get('/transports/{slug}', [AdminTransportController::class, 'show']);
-            Route::put('/transports/{slug}', [AdminTransportController::class, 'update']);
-            Route::delete('/transports/{slug}', [AdminTransportController::class, 'destroy']);
+            // Driver
+            Route::get('/drivers', [AdminDriverController::class, 'index']);
+            Route::get('/drivers-all', [AdminDriverController::class, 'all']);
+            Route::get('/drivers/{driver}', [AdminDriverController::class, 'show']);
+            Route::post('/drivers', [AdminDriverController::class, 'store']);
+            Route::put('/drivers/{driver}', [AdminDriverController::class, 'update']);
+            Route::delete('/drivers/{driver}', [AdminDriverController::class, 'destroy']);
+
+            //Car Product
+            Route::get('/transports', [AdminCarController::class, 'index']);
+            Route::post('/transports', [AdminCarController::class, 'store']);
+            Route::get('/transports/{slug}', [AdminCarController::class, 'show']);
+            Route::put('/transports/{slug}', [AdminCarController::class, 'update']);
+            Route::delete('/transports/{slug}', [AdminCarController::class, 'destroy']);
 
             //Tour Product
             Route::get('/tours', [AdminTourController::class, 'index']);
@@ -97,12 +114,4 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::delete('/{admin}', [AdminController::class, 'destroy']);
         });
     });
-
-    //Transports
-    Route::post('/transports', [TransportController::class, 'list']);
-
-    //Tour
-    Route::post('/tours', [TourController::class, 'list']);
-    Route::get('/tours/{slug}', [TourController::class, 'show']);
-    Route::get('/popular-tours', [TourController::class, 'popular']);
 });
