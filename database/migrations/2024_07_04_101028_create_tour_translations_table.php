@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_translations', function (Blueprint $table) {
+        Schema::create('tour_translations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products', 'id');
-            $table->string('lang', 20);
-            $table->text('description');
+
+            $table->unsignedBigInteger('tour_id')->nullable();
+            $table->foreign('tour_id')->references('id')->on('tours')->cascadeOnDelete();
+
+            $table->string('languange', 20);
+            $table->string('field');
+            $table->text('translation');
             $table->timestamps();
-            
-            $table->foreign('lang')->references('code')->on('languages');
-            $table->unique(['product_id', 'lang']);
+
+            $table->foreign('language')->references('code')->on('languages');
         });
     }
 

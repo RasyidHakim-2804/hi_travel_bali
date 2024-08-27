@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pivot_product_facility', function (Blueprint $table) {
+        Schema::create('tours', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products', 'id');
-            $table->foreignId('facility_id')->constrained('facilities', 'id');
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->unsignedInteger('max_person');
+            $table->boolean('is_active')->default(1);
+            $table->unsignedInteger('order_count')->default(0);
+            $table->unsignedDecimal('price', 11, 2);
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pivot_product_facilities');
+        Schema::dropIfExists('tours');
     }
 };

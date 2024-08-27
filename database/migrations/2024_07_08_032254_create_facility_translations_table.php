@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('facility_translations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('facility_id')->constrained('facilities', 'id');
-            $table->string('lang', 20);
-            $table->string('title');
+
+            $table->unsignedBigInteger('facility_id')->nullable();
+            $table->foreign('facility_id')->references('id')->on('facilities')->cascadeOnDelete();
+
+            $table->string('field');
+            $table->string('language', 20);
             $table->timestamps();
-            
-            $table->foreign('lang')->references('code')->on('languages');
-            $table->unique(['facility_id', 'lang']);
+
+            $table->foreign('language')->references('code')->on('languages');
         });
     }
 

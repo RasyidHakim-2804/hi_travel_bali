@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pivot_product_location', function (Blueprint $table) {
+        Schema::create('tour_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products', 'id');
-            $table->foreignId('location_id')->constrained('locations', 'id');
+
+            $table->unsignedBigInteger('tour_id')->nullable();
+            $table->foreign('tour_id')->references('id')->on('tours')->cascadeOnDelete();
+            
+            $table->unsignedInteger('position')->nullable();
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pivot_product_locations');
+        Schema::dropIfExists('product_images');
     }
 };

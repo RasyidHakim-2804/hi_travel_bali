@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('cars', function (Blueprint $table) {
             $table->id();
+            
+            $table->unsignedBigInteger('driver_id')->nullable();
+            $table->foreign('driver_id')->references('id')->on('drivers')->cascadeOnDelete();
+            
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('type');
+            $table->string('image');
             $table->unsignedInteger('max_person');
             $table->boolean('is_active')->default(1);
-            $table->unsignedInteger('popular')->default(0);
-            $table->unsignedDecimal('price_per_km', 11, 2)->nullable();
+            $table->unsignedInteger('order_count')->default(0);
             $table->unsignedDecimal('price', 11, 2);
             $table->timestamps();
         });
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('cars');
     }
 };
