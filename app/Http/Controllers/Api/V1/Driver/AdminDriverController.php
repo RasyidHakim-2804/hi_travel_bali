@@ -18,7 +18,7 @@ class AdminDriverController extends Controller
         return DriverResource::collection(Driver::paginate(25));
     }
 
-    public function list()
+    public function all()
     {
         return DriverResource::collection(Driver::all(['id', 'name']));
     }
