@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Api\V1\Facility\AdminFacilityController;
 use App\Http\Controllers\Api\V1\Location\AdminLocationController;
-use App\Http\Controllers\Api\V1\Product\Car\AdminCarController;
-use App\Http\Controllers\Api\V1\Product\Tour\AdminTourController;
+use App\Http\Controllers\Api\V1\Car\AdminCarController;
+use App\Http\Controllers\Api\V1\Tour\AdminTourController;
 use App\Http\Controllers\Api\V1\Driver\AdminDriverController;
 
-use App\Http\Controllers\Api\V1\Product\Tour\AdminTourImageController;
-use App\Http\Controllers\Api\V1\Product\Tour\TourController;
-use App\Http\Controllers\Api\V1\Product\Car\CarController;
+use App\Http\Controllers\Api\V1\Tour\AdminTourImageController;
+use App\Http\Controllers\Api\V1\Tour\TourController;
+use App\Http\Controllers\Api\V1\Car\CarController;
 
 use App\Http\Controllers\Api\V1\Admin\AdminController;
 use App\Http\Controllers\Api\V1\Admin\AdminEmailChangesVerificationController;
