@@ -19,9 +19,9 @@ class Car extends Model
         ],
     ];
 
-    public function driver(): BelongsTo
+    public function driver(): BelongsToMany
     {
-        return $this->belongsTo(Driver::class);
+        return $this->belongsToMany(Driver::class, PivotDriverCar::class, 'car_id', 'driver_id');
     }
 
     public function facilities(): BelongsToMany

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -11,8 +12,8 @@ class Driver extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function cars(): HasMany
+    public function cars(): BelongsToMany
     {
-        return $this->hasMany(Car::class);
+        return $this->belongsToMany(Car::class, PivotDriverCar::class, 'driver_id', 'car_id');
     }
 }
