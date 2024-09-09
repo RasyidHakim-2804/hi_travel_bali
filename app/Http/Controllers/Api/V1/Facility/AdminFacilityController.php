@@ -3,130 +3,125 @@
 namespace App\Http\Controllers\Api\V1\Facility;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Facility\CreateFacilityRequest;
-use App\Http\Requests\Api\Facility\UpdateFacilityRequest;
-use App\Http\Resources\Common\SuccessResource;
-use App\Http\Resources\Facility\FacilityResource;
+use App\Http\Requests\Api\Facility\FacilityRequest;
+use App\Http\Resources\Facility\AdminDetailFacilityResource;
+use App\Http\Resources\Facility\ListFacilityResource;
 use App\Models\Facility;
-use App\Models\Translation\FacilityTranslation;
-use App\Service\Services\ImageServices\ImageService;
+use App\Services\Images\ImageService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class AdminFacilityController extends Controller
 {
+    use JsonResponsesTrait;
+
+    protected $permissionService;
+
+    public function __construct()
+    {
+        // $this->permissionService = (new AdminPermissionService('article'));
+    }
+
     public function index()
     {
-        $locations = Facility::paginate(25);
+        $itineraries = Facility::with([
+            'translations' => fn($query) => $query->language()
+        ])->paginate(25);
 
-        return FacilityResource::collection($locations);
+        return ListFacilityResource::collection($itineraries);
+    }
+
+    public function all()
+    {
+        $itineraries = Facility::with([
+            'translations' => fn($query) => $query->language()
+        ])->get();
+
+        return ListFacilityResource::collection($itineraries);
     }
 
     public function show(Facility $facility)
     {
-        return new FacilityResource($facility->load('translations'));   
+        $facility = $facility->load('translations');
+        
+        return $this->successGet(
+            new AdminDetailFacilityResource($facility)
+        );
     }
 
-    public function store(CreateFacilityRequest $request)
+    public function store(FacilityRequest $request)
     {
-        try {
-            DB::beginTransaction();
+        DB::transaction(function() use ($request) {
 
-            $facility       = new Facility();
-            $imageService   = new ImageService($facility);
-            
-            $facility->icon_url = $imageService->upload($request->icon)->path;
-            $facility->slug     = $request->en_name;
+            $facility        = new Facility();
+            $facility->image = $this->setImage($facility, $request->image);
             $facility->save();
-
-            $request = $request->validated();
-
-            foreach (['id', 'en'] as $lang) {
-                $translate              = new FacilityTranslation();
-                $translate->lang        = $lang;
-                $translate->name        = $request[$lang . '_name'];
-                $translate->facility_id = $facility->id;
-                $translate->save();
-            }
-    
-            DB::commit();
             
-            return new SuccessResource(201);
-
-        } catch (\Throwable $th) {
-            
-            DB::rollBack();
-
-            if (isset($imageService)) {
-                $imageService->rollback();
+            foreach ($request->validated('description') as $lang => $description) {
+                $this->setTranslations($facility, $lang, 'description', $description);
             }
+        });
 
-            throw $th;
-        }
+        return $this->successStore();
     }
 
-    public function update(UpdateFacilityRequest $request, Facility $facility)
+    public function update(Facility $facility, FacilityRequest $request)
     {
-        try {
-            DB::beginTransaction();
-
-            if ($request->has('icon')) {
-                $imageService       = new ImageService($facility);
-                $facility->icon_url = $imageService->upload($request->icon)->path; 
+        DB::transaction(function() use ($request, $facility) {
+            
+            if ($request->image != null) {
+                $facility->image = $this->setImage($facility, $request->image);
             }
 
-            $facility->slug     = $request->en_name;
             $facility->save();
-
-            $request    = $request->validated();
-
-            foreach (['id', 'en'] as $lang) {
-                $translate              = FacilityTranslation::where('facility_id', $facility->id)
-                                            ->where('lang', $lang)
-                                            ->first();
-                                            
-                $translate->name        = $request[$lang . '_name'];
-                $translate->save();
-            }
-    
-            DB::commit();
             
-            return new SuccessResource(201);
-
-        } catch (\Throwable $th) {
-            
-            DB::rollBack();
-
-            if (isset($imageService)) {
-                $imageService->rollback();
+            foreach ($request->validated('description') as $lang => $description) {
+                $this->setTranslations($facility, $lang, 'description', $description);
             }
+        });
 
-            throw $th;
-        }
+        return $this->successResponse();
     }
 
     public function destroy(Facility $facility)
     {
+        DB::beginTransaction();
+
         try {
-            DB::beginTransaction();
-            
-            $imageService = new ImageService($facility);
-            $imageService->delete();
-            $facility->translations()->delete();
+        
+            $facility->cars()->detach();
             $facility->delete();
 
             DB::commit();
 
-            return new SuccessResource();
-        
         } catch (\Throwable $th) {
-            
-            DB::rollBack();
-
-            if (isset($imageService)) {
-                $imageService->rollback();
-            }
-
             throw $th;
         }
+    }
+
+    // Private function
+
+    protected function setTranslations(Facility $facility, $lang, $field, $translation)
+    {
+        $facilityTranslation = $facility->translations()->where('language',$lang)->where('field', $field)->firstOrNew();
+
+        $facilityTranslation->facility_id   = $facility->id;
+        $facilityTranslation->language     = $lang;
+        $facilityTranslation->field        = $field;
+        $facilityTranslation->translation  = $translation;
+        $facilityTranslation->save();
+    }
+
+    protected function setImage(Facility $facility, $requestImage)
+    {
+        $image = new ImageService($facility->imagePath());
+        
+        if ($facility->image) {
+            $image->delete($facility->image);
+        }
+
+        $image->save($requestImage);
+
+        return $image->getImageName();
     }
 }

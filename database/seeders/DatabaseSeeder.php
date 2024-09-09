@@ -12,20 +12,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        (new FirstAccountSeeder)->run();
         (new LanguageSeeder)->run();
+        (new AdminSeeder)->run();
 
         (new LocationSeeder)->run();
-        (new FacilitySeeder)->run();
-        (new FacilityTranslationSeeder)->run();
+        // (new FacilitySeeder)->run();
+        // (new FacilityTranslationSeeder)->run();
 
         // product
-        (new TransportSeeder)->run();
-        (new TourSeeder)->run();
+        // (new TransportSeeder)->run();
+        // (new TourSeeder)->run();
 
-        (new ProductTranslationSeeder)->run();
-        (new PivotProductFacilitySeeder)->run();
-        (new PivotProductLocationSeeder)->run();
+        // (new ProductTranslationSeeder)->run();
+        // (new PivotProductFacilitySeeder)->run();
+        // (new PivotProductLocationSeeder)->run();
 
         //article
     }

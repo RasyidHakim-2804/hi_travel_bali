@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreign('facility_id')->references('id')->on('facilities')->cascadeOnDelete();
 
             $table->string('field');
+            $table->text('translation');
             $table->string('language', 20);
             $table->timestamps();
 

@@ -17,8 +17,8 @@ class PivotProductLocationSeeder extends Seeder
     {
         foreach ($this->tourIds as $id) {
             for ($i = 1; $i <= rand(1,5) ; $i++) { 
-                DB::table('pivot_product_location')->insert([
-                    'product_id'    => $id,
+                DB::table('pivot_tour_location')->insert([
+                    'tour_id'       => $id,
                     'location_id'   => $i,
                     'created_at'    => now(),
                     'updated_at'    => null,

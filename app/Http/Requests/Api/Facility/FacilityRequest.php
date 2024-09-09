@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\Facility;
 
+use App\Models\Language;
 use Illuminate\Foundation\Http\FormRequest;
 
 class FacilityRequest extends FormRequest
@@ -21,14 +22,14 @@ class FacilityRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rule = [
-            'id_name'   => 'required|string|max:255',
-            'en_name'   => 'required|string|max:255',
-            'image'     => 'required|image|max:2048|mimes:png,jpg'
-        ];
+        foreach (Language::code() as $lang) {
+            $rule['description.' . $lang]   = 'required|string|max:200';
+        }
         
         if (strtolower($this->method()) == 'put') {
-            $rule['image'] = 'nullable|image|max:2048|mimes:png,jpg';
+            $rule['image'] = 'nullable|image|mimes:png,jpg|max:2048';
+        } else {
+            $rule['image'] = 'required|image|mimes:png,jpg|max:2048';
         }
 
         return $rule;

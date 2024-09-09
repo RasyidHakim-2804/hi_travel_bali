@@ -25,7 +25,6 @@ class LocationSeeder extends Seeder
         foreach ($this->locations as $location) {
             DB::table('locations')->insert([
                 'name'          => $location,
-                'slug'          => Str::slug($location),
                 'created_at'    => now(),
                 'updated_at'    => null,
             ]);
