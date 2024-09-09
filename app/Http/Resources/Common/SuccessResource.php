@@ -20,7 +20,7 @@ class SuccessResource extends JsonResource
     }
 
 
-    public function withResponse(Request $request, JsonResponse $response)
+    public function withResponse($request, $response)
     {
         return $response->setStatusCode($this->code);
     }
@@ -30,12 +30,12 @@ class SuccessResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request): array
     {
         return [
             'status' => 'success',
 
-            $this->mergeWhen($this->message != null, [
+            $this->mergeWhen($this->message !== null, [
                 'message' => $this->message
             ]),
 
