@@ -40,5 +40,4 @@ return [
 		'username' => "untukiklan:Usps@881",
 		'testmode' => false,
 	],
-
 ];
