@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Car;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateCarRequest extends FormRequest
+class CarRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,15 +21,21 @@ class CreateCarRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rule = [
             'name'                  => 'required|string|max:255',
-            'idr_price'             => 'required|numeric|max:100000000|min:0',
-            'price_per_km'          => 'required|numeric|min:0|max:100000000',
+            'price'             => 'required|numeric|max:100000000|min:0',
             'max_person'            => 'required|numeric|min:1',
-            'image'                 => 'required|image|max:2048',
+            'is_active'             => 'required|boolean',
+            'image'                 => 'required|image|max:2048|mimes:png,jpg,jpeg',
 
             'facilities'            => 'array',
             'facilities.*'          => 'numeric|distinct|exists:facilities,id'
         ];
+
+        if (strtolower($this->method()) == 'put') {
+            $rule['image'] = 'nullable|image|max:2048|mimes:png,jpg,jpeg';
+        }
+
+        return $rule;
     }
 }
