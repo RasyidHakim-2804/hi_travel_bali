@@ -14,9 +14,6 @@ return new class extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             
-            $table->unsignedBigInteger('driver_id')->nullable();
-            $table->foreign('driver_id')->references('id')->on('drivers')->cascadeOnDelete();
-            
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('image');
@@ -24,6 +21,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(1);
             $table->unsignedDecimal('price', 11, 2);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
