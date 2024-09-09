@@ -12,6 +12,8 @@ use App\Models\Admin;
 use App\Models\AdminEmailChangesVerificationToken;
 use App\Models\AdminEmailVerificationToken;
 use App\Models\AdminPermission;
+use App\Notifications\Admin\AdminEmailChangesVerificationNotification;
+use App\Notifications\Admin\AdminRegisterVerificationNotification;
 use App\Services\Admin\AdminPermissionService;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
@@ -28,7 +30,7 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->permissionService = (new AdminPermissionService('admin'));
+        $this->permissionService = (new AdminPermissionService('admins'));
     }
 
     public function index()
@@ -65,7 +67,7 @@ class AdminController extends Controller
 
         $admin->password            = bcrypt($request->password);
         $admin->uuid                = $this->generateUuid();
-        $admin->is_active           = $this->generateUuid();
+        $admin->is_active           = 0;
         $admin->email_verified_at   = now();
 
         $admin = $this->saveProficePicture($admin, $request->profile_picture);
@@ -74,9 +76,9 @@ class AdminController extends Controller
 
         $token = Str::random(255);
 
-        // $this->createEmailVerification($admin->id, $token);
+        $this->createEmailVerification($admin->id, $token);
 
-        // $this->sendEmail($admin, $token);
+        $this->sendEmail($admin, $token);
 
         if (isset($request->permissions)) $this->savePermission($request->permissions, $admin->id);
 
@@ -109,7 +111,7 @@ class AdminController extends Controller
         return $this->successStore();
     }
 
-    protected function saveProficePicture($admin, $uploadedImage)
+    protected function saveProfilePicture($admin, $uploadedImage)
     {
         if (!$uploadedImage) return $admin;
 
@@ -163,7 +165,8 @@ class AdminController extends Controller
         $data['first_name']           = $admin->first_name;
         $data['email_validation_url'] = env('FRONTEND_URL') . '/admin/email-verification/' . $token;
 
-        Mail::to($admin->email)->send((new AdminRegisterVerificationMail($data)));
+        // Mail::to($admin->email)->send((new AdminRegisterVerificationMail($data)));
+        $admin->notify(new AdminRegisterVerificationNotification($data['first_name'], $data['email_validation_url']));
     }
 
     protected function createEmailChangesVerification($admin, $newEmail)
@@ -178,7 +181,8 @@ class AdminController extends Controller
 
         $emailChangesVerification->save();
 
-        $this->sendEmailEmailChangesVerification($admin->first_name, $newEmail, $token);
+        // $this->sendEmailEmailChangesVerification($admin->first_name, $newEmail, $token);
+        $this->sendNotificationEmailChangesVerification($admin, $token);
 
         return true;
     }
@@ -190,6 +194,13 @@ class AdminController extends Controller
         $data['email_changes_verification_url'] = env('FRONTEND_URL') . '/admin/email-verification/' . $token;
 
         Mail::to($email)->send((new AdminEmailChangesVerificationMail($data)));
+    }
+    
+    protected function sendNotificationEmailChangesVerification(Admin $admin, $token)
+    {
+        $url = env('FRONTEND_URL') . '/admin/email-verification/' . $token;
+
+        $admin->notify(new AdminEmailChangesVerificationNotification($url, $admin->first_name));
     }
 
     protected function savePermission($permissions, $adminId)
