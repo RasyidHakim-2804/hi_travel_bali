@@ -7,10 +7,6 @@
 </x-slot:header>
 
 {{-- Body --}}
-<div style="text-align: center">
-    <img src="https://picsum.photos/200" class="logo" alt="Laravel Logo">
-</div>
-<br>
 {{ $slot }}
 
 {{-- Subcopy --}}
