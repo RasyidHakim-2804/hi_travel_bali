@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
+use Spatie\Sluggable\SlugOptions;
 
 class Car extends Model
 {
@@ -27,5 +29,29 @@ class Car extends Model
     public function facilities(): BelongsToMany
     {
         return $this->belongsToMany(Facility::class, 'pivot_car_facility');
+    }
+
+    public function scopeActive($query): void
+    {
+        $query->where('is_active', true);
+    }
+
+    public function scopeTripPrice($query, float $distance): void
+    {
+        $result = round($distance);
+
+        $query->select(
+            '*',
+            DB::raw('price + (price_per_km * ' . $result . ') as trip_price')
+        );
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+                ->generateSlugsFrom('name')
+                ->saveSlugsTo('slug')
+                ->startSlugSuffixFrom('2')
+                ->slugsShouldBeNoLongerThan(100);
     }
 }
