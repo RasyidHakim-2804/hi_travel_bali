@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Tour;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateTourRequest extends FormRequest
+class SaveTourImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +22,12 @@ class CreateTourRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'                  => 'required|string|max:255',
-            'idr_price'             => 'required|numeric|max:100000000',
-            'max_person'            => 'required|numeric|min:1',
-
-            'id_description'        => 'required|string',
-            'en_description'        => 'required|string',
-
-            'locations'             => 'array',
-            'locations.*'           => 'numeric|distinct|exists:locations,id'
+            'images_id'      => 'array|max:5',
+            'images_id.*'    => [
+                'required',
+                'distinct',
+                'exists:tour_images,id'
+            ],
         ];
     }
 }

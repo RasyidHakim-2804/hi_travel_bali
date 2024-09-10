@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Tour;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserListRequest extends FormRequest
+class StoreTourImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class UserListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'location_id'       => 'required|exists:locations,id',
-            'tourist_numbers'   => 'required|numeric|min:1'
+            'images'      => 'required|image|max:2048|mimes:png,jpg,jpeg',
         ];
     }
 }
