@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('fast_boat_order_details', function (Blueprint $table) {
-            $table->string('departure_harbor_name')->after('arrival_harbor_id');
-            $table->string('arrival_harbor_name')->after('departure_harbor_name');
+            // $table->string('departure_harbor_name')->after('arrival_harbor_id');
+            // $table->string('arrival_harbor_name')->after('departure_harbor_name');
         });
     }
 

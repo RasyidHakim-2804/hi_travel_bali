@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('refund_request_pins', function (Blueprint $table) {
             $table->id();
+            
             $table->unsignedBigInteger('fast_boat_order_id')->nullable();
-            $table->foreign('fast_boat_order_id')->references('id')->on('fast_boat_orders')->onDelete('cascade');
+            // $table->foreign('fast_boat_order_id')->references('id')->on('fast_boat_orders')->onDelete('cascade');
+            
             $table->unsignedBigInteger('private_boat_order_id')->nullable();
-            $table->foreign('private_boat_order_id')->references('id')->on('private_boat_orders')->onDelete('cascade');
+            // $table->foreign('private_boat_order_id')->references('id')->on('private_boat_orders')->onDelete('cascade');
+            
             $table->string('pin');
             $table->timestamp('expired_at');
             $table->softDeletes();

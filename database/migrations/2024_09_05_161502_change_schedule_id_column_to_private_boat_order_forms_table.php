@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('private_boat_order_forms', function (Blueprint $table) {
-            $table->dropForeign(['schedule_id']);
-            $table->foreign('schedule_id')->references('id')->on('private_boats');
-            $table->renameColumn('schedule_id', 'product_id');
+            // $table->dropForeign(['schedule_id']);
+            // $table->foreign('schedule_id')->references('id')->on('private_boats');
+            // $table->renameColumn('schedule_id', 'product_id');
         });
     }
 

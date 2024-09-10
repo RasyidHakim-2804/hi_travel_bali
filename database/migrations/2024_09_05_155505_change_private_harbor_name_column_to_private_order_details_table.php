@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('private_boat_order_details', function (Blueprint $table) {
-            $table->renameColumn('private_harbor_name', 'pickup_harbor_name');
+            // $table->renameColumn('private_harbor_name', 'pickup_harbor_name');
         });
     }
 

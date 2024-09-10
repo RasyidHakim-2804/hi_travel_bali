@@ -15,14 +15,20 @@ return new class extends Migration
     {
         Schema::create('fast_boat_order_details', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('order_id');
-            $table->foreignId('fast_boat_id')->constrained('fast_boats', 'id');
+            // $table->foreignId('fast_boat_id')->constrained('fast_boats', 'id');
+            
             $table->unsignedBigInteger('schedule_id');
-            $table->foreign('schedule_id')->references('id')->on('fast_boat_schedules')->cascadeOnDelete();
+            // $table->foreign('schedule_id')->references('id')->on('fast_boat_schedules')->cascadeOnDelete();
+            
             $table->unsignedBigInteger('schedule_variant_id')->nullable();
-            $table->foreign('schedule_variant_id')->references('id')->on('fast_boat_schedule_variants')->cascadeOnDelete();
-            $table->foreignId('departure_harbor_id')->constrained('harbors', 'id');
-            $table->foreignId('arrival_harbor_id')->constrained('harbors', 'id');
+            // $table->foreign('schedule_variant_id')->references('id')->on('fast_boat_schedule_variants')->cascadeOnDelete();
+            
+            // $table->foreignId('departure_harbor_id')->constrained('harbors', 'id');
+            
+            // $table->foreignId('arrival_harbor_id')->constrained('harbors', 'id');
+            
             $table->time('departure_time');
             $table->time('arrival_time');
             $table->string('quantity');

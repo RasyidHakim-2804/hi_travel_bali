@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('order_payments', function (Blueprint $table) {
             $table->id();
+            
             $table->unsignedBigInteger('fast_boat_order_id');
-            $table->foreign('fast_boat_order_id')->references('id')->on('fast_boat_orders')->cascadeOnDelete();
+            // $table->foreign('fast_boat_order_id')->references('id')->on('fast_boat_orders')->cascadeOnDelete();
+            
             $table->string('invoice_id')->unique();
             $table->string('payment_method')->nullable();
             $table->string('payment_channel')->nullable();

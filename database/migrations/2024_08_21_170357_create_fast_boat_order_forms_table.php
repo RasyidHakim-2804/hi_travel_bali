@@ -15,12 +15,16 @@ return new class extends Migration
     {
         Schema::create('fast_boat_order_forms', function (Blueprint $table) {
             $table->id();
+
             $table->unsignedBigInteger('order_id');
-            $table->foreign('order_id')->references('id')->on('fast_boat_orders')->cascadeOnDelete();
+            // $table->foreign('order_id')->references('id')->on('fast_boat_orders')->cascadeOnDelete();
+            
             $table->unsignedBigInteger('schedule_id');
-            $table->foreign('schedule_id')->references('id')->on('fast_boat_schedules')->cascadeOnDelete();
+            // $table->foreign('schedule_id')->references('id')->on('fast_boat_schedules')->cascadeOnDelete();
+            
             $table->unsignedBigInteger('variant_id')->nullable();
-            $table->foreign('variant_id')->references('id')->on('fast_boat_schedule_variants')->cascadeOnDelete();
+            // $table->foreign('variant_id')->references('id')->on('fast_boat_schedule_variants')->cascadeOnDelete();
+            
             $table->string('name');
             $table->string('nationality')->nullable();
             $table->boolean('is_local')->default(0);
