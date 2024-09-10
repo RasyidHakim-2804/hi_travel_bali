@@ -49,14 +49,4 @@ class Car extends Model
     {
         $query->where('max_person', '>=', $passengerCount);
     }
-
-    public function scopeTripPrice($query, float $distance): void
-    {
-        $result = round($distance);
-
-        $query->select(
-            '*',
-            DB::raw('price + (price_per_km * ' . $result . ') as trip_price')
-        );
-    }
 }

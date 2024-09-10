@@ -10,10 +10,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Driver extends Model
 {
-    use HasFactory, SoftDeletes;
-
-    public function cars(): BelongsToMany
-    {
-        return $this->belongsToMany(Car::class, PivotDriverCar::class, 'driver_id', 'car_id');
-    }
+    use HasFactory;
 }
