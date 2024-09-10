@@ -21,6 +21,7 @@ class CarResource extends JsonResource
             'slug'          => $this->slug,
             'price'         => $this->price,
             'is_active'     => $this->is_active,
+            'max_person'    => $this->max_person,
             'image'         => $this->imageUrl('image'),
             
             $this->mergeWhen(($this->price_per_km != null), [
