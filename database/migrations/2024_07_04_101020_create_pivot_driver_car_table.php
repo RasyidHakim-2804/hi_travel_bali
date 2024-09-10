@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('pivot_driver_car', function (Blueprint $table) {
+        Schema::create('pivot_driver_car', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('driver_id')->nullable();
