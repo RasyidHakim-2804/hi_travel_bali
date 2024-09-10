@@ -45,6 +45,11 @@ class Car extends Model
         $query->where('is_active', true);
     }
 
+    public function scopePassangerMount($query, int $passangerMount)
+    {
+        $query->where('max_person', '>=', $passangerMount);
+    }
+
     public function scopeTripPrice($query, float $distance): void
     {
         $result = round($distance);
