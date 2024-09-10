@@ -25,7 +25,7 @@ class AdminCarController extends Controller
     public function show(Car $car)
     {
         $car = $car->load([
-            'facilities'
+            'facilities.translations' => fn($query) => $query->language('en')
         ]);
 
         return $this->successGet(
