@@ -41,16 +41,18 @@ class FacilityTranslationSeeder extends Seeder
         foreach ($this->facilities as $key) {
             DB::table('facility_translations')->insert([
                 'facility_id'   => $i,
-                'lang'          => 'id',
-                'title'         => $key['id'],
+                'language'      => 'id',
+                'field'         => 'description',
+                'translation'   => $key['id'],
                 'created_at'    => now(),
                 'updated_at'    => null
             ]);
 
             DB::table('facility_translations')->insert([
                 'facility_id'   => $i,
-                'lang'          => 'en',
-                'title'         => $key['en'],
+                'language'      => 'en',
+                'field'         => 'description',
+                'translation'   => $key['en'],
                 'created_at'    => now(),
                 'updated_at'    => null
             ]);

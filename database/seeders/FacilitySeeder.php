@@ -23,8 +23,7 @@ class FacilitySeeder extends Seeder
     {
         foreach ($this->facilities as $facility ) {
             DB::table('facilities')->insert([
-                'slug'          => Str::slug($facility),
-                'icon_url'      => 'https://picsum.photos/200',
+                'image'         => 'https://picsum.photos/200',
                 'created_at'    => now(),
                 'updated_at'    => null
             ]);

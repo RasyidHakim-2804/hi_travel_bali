@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
         (new AdminSeeder)->run();
 
         (new LocationSeeder)->run();
-        // (new FacilitySeeder)->run();
-        // (new FacilityTranslationSeeder)->run();
+        (new FacilitySeeder)->run();
+        (new FacilityTranslationSeeder)->run();
 
         // product
         // (new TransportSeeder)->run();
