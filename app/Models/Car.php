@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
+use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 class Car extends Model
 {
-    use HasFactory, ImageStorageTrait;
+    use HasFactory, ImageStorageTrait, HasSlug;
 
     protected $imageSetting = [
         'folder' => 'car',
@@ -20,6 +21,13 @@ class Car extends Model
             'image',
         ],
     ];
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+                ->generateSlugsFrom('name')
+                ->saveSlugsTo('slug');
+    }
 
     public function driver(): BelongsToMany
     {
@@ -44,14 +52,5 @@ class Car extends Model
             '*',
             DB::raw('price + (price_per_km * ' . $result . ') as trip_price')
         );
-    }
-
-    public function getSlugOptions(): SlugOptions
-    {
-        return SlugOptions::create()
-                ->generateSlugsFrom('name')
-                ->saveSlugsTo('slug')
-                ->startSlugSuffixFrom('2')
-                ->slugsShouldBeNoLongerThan(100);
     }
 }
