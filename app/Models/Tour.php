@@ -20,6 +20,16 @@ class Tour extends Model
                 ->saveSlugsTo('slug');
     }
 
+    public function variants(): HasMany
+    {
+        return $this->hasMany(TourVariant::class, 'tour_id', 'id');
+    }
+
+    public function thumbnailVariant()
+    {
+        return $this->hasOne(TourVariant::class, 'tour_id', 'id')->ofMany('price', 'MIN');
+    }
+
     public function translations(): HasMany
     {
         return $this->hasMany(TourTranslation::class);
