@@ -18,11 +18,6 @@ class AdminDriverController extends Controller
         return DriverResource::collection(Driver::paginate(25));
     }
 
-    public function all()
-    {
-        return DriverResource::collection(Driver::all(['id', 'name']));
-    }
-
     public function show(Driver $driver)
     {
         return $this->successGet(
@@ -36,6 +31,7 @@ class AdminDriverController extends Controller
         $driver->name   = $request->name;
         $driver->phone  = $request->phone;
         $driver->email  = $request->email;
+
         $driver->save();
 
         return $this->successStore();
@@ -46,8 +42,9 @@ class AdminDriverController extends Controller
         $driver->name   = $request->name;
         $driver->phone  = $request->phone;
         $driver->email  = $request->email;
-        $driver->save();
 
+        $driver->save();
+        
         return $this->successResponse();
     }
 
