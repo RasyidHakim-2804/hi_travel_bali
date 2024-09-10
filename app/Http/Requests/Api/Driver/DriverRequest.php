@@ -23,9 +23,11 @@ class DriverRequest extends FormRequest
     public function rules(): array
     {
         $rule = [
-            'name'  => 'required|string|max:100',
-            'phone' => 'required|string|max:20',
-            'email' => [
+            'name'      => 'required|string|max:100',
+            'phone'     => 'required|string|max:20',
+            'cars_id'   => 'required|array',
+            'cars_id.*' => 'exists:cars,id',
+            'email'     => [
                 'required',
                 'email'
             ]
