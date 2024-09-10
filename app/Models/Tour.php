@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Sluggable\HasSlug;
@@ -18,6 +19,11 @@ class Tour extends Model
         return SlugOptions::create()
                 ->generateSlugsFrom('name')
                 ->saveSlugsTo('slug');
+    }
+
+    public function locations(): BelongsToMany
+    {
+        return $this->belongsToMany(Location::class, PivotTourLocation::class, 'tour_id', 'location_id');
     }
 
     public function variants(): HasMany
