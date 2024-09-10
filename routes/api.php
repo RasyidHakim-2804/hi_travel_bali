@@ -64,7 +64,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::post('/articles/{article}/comments', [ArticleCommentController::class, 'store']);
 
     //Cars
-    Route::post('/transports', [CarController::class, 'list']);
+    Route::post('/cars', [CarController::class, 'list']);
 
     //Tour
     Route::post('/tours', [TourController::class, 'list']);
@@ -126,24 +126,24 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             Route::put('/drivers/{driver}', [AdminDriverController::class, 'update']);
             Route::delete('/drivers/{driver}', [AdminDriverController::class, 'destroy']);
 
-            //Car Product
-            Route::get('/transports', [AdminCarController::class, 'index']);
-            Route::post('/transports', [AdminCarController::class, 'store']);
-            Route::get('/transports/{slug}', [AdminCarController::class, 'show']);
-            Route::put('/transports/{slug}', [AdminCarController::class, 'update']);
-            Route::delete('/transports/{slug}', [AdminCarController::class, 'destroy']);
+            //Car
+            Route::get('/cars', [AdminCarController::class, 'index']);
+            Route::post('/cars', [AdminCarController::class, 'store']);
+            Route::get('/cars/{car:slug}', [AdminCarController::class, 'show']);
+            Route::put('/cars/{car:slug}', [AdminCarController::class, 'update']);
+            Route::delete('/cars/{car:slug}', [AdminCarController::class, 'destroy']);
 
-            //Tour Product
+            //Tour
             Route::get('/tours', [AdminTourController::class, 'index']);
             Route::post('/tours', [AdminTourController::class, 'store']);
-            Route::get('/tours/{slug}', [AdminTourController::class, 'show']);
-            Route::put('/tours/{slug}', [AdminTourController::class, 'update']);
-            Route::delete('/tours/{slug}', [AdminTourController::class, 'destroy']);
+            Route::get('/tours/{tour:slug}', [AdminTourController::class, 'show']);
+            Route::put('/tours/{tour:slug}', [AdminTourController::class, 'update']);
+            Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy']);
 
             //Tour Image
-            Route::get('/products/{slug}/images', [AdminTourImageController::class, 'index']);
-            Route::post('/products/{slug}/images', [AdminTourImageController::class,'store']);
-            Route::post('/products/{slug}/save-images', [AdminTourImageController::class, 'save']);
+            Route::get('/tours/{tour:slug}/images', [AdminTourImageController::class, 'index']);
+            Route::post('/tours/{tour:slug}/images', [AdminTourImageController::class,'store']);
+            Route::post('/tours/{tour:slug}/save-images', [AdminTourImageController::class, 'save']);
 
             // Admin - FastBoat Order
             Route::get('/fast-boat-orders', [AdminFastBoatOrderController::class, 'index']);
