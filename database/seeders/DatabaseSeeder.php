@@ -19,12 +19,12 @@ class DatabaseSeeder extends Seeder
         (new FacilitySeeder)->run();
         (new FacilityTranslationSeeder)->run();
 
-        // product
-        // (new TransportSeeder)->run();
+        // Car
+        (new CarSeeder)->run();
+        (new PivotCarFacilitySeeder)->run();
+        
         // (new TourSeeder)->run();
-
         // (new ProductTranslationSeeder)->run();
-        // (new PivotProductFacilitySeeder)->run();
         // (new PivotProductLocationSeeder)->run();
 
         //article

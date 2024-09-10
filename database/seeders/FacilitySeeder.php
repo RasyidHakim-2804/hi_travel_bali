@@ -21,12 +21,17 @@ class FacilitySeeder extends Seeder
      */
     public function run(): void
     {
+        $id = 1;
+
         foreach ($this->facilities as $facility ) {
             DB::table('facilities')->insert([
+                'id'            => $id,
                 'image'         => 'https://picsum.photos/200',
                 'created_at'    => now(),
                 'updated_at'    => null
             ]);
+
+            $id++;
         }
     }
 }
