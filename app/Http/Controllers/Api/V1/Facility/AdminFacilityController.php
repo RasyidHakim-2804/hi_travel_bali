@@ -25,7 +25,7 @@ class AdminFacilityController extends Controller
     public function index()
     {
         $itineraries = Facility::with([
-            'translations' => fn($query) => $query->language()
+            'translations' => fn($query) => $query->language('en')
         ])->paginate(25);
 
         return ListFacilityResource::collection($itineraries);
@@ -34,7 +34,7 @@ class AdminFacilityController extends Controller
     public function all()
     {
         $itineraries = Facility::with([
-            'translations' => fn($query) => $query->language()
+            'translations' => fn($query) => $query->language('en')
         ])->get();
 
         return ListFacilityResource::collection($itineraries);
