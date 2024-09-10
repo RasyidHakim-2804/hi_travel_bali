@@ -30,11 +30,6 @@ class Car extends Model
                 ->saveSlugsTo('slug');
     }
 
-    public function driver(): BelongsToMany
-    {
-        return $this->belongsToMany(Driver::class, PivotDriverCar::class, 'car_id', 'driver_id');
-    }
-
     public function facilities(): BelongsToMany
     {
         return $this->belongsToMany(Facility::class, 'pivot_car_facility');
