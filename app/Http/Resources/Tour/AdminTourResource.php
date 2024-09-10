@@ -19,7 +19,7 @@ class AdminTourResource extends JsonResource
             'id'            => $this->id,
             'name'          => $this->name,
             'slug'          => $this->slug,
-            'price'         => $this->idr_price,
+            'price'         => $this->variants->first()->price,
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
 
@@ -32,7 +32,7 @@ class AdminTourResource extends JsonResource
 
             'meta' => $this->whenLoaded(
                 'translations',
-                fn() => fn() => TourTranslationResource::collection(
+                fn() => TourTranslationResource::collection(
                     $this->translations->where('field','meta')
                 )
             ),
