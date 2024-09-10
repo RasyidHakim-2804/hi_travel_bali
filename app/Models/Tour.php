@@ -17,19 +17,12 @@ class Tour extends Model
     {
         return SlugOptions::create()
                 ->generateSlugsFrom('name')
-                ->saveSlugsTo('slug')
-                ->startSlugSuffixFrom('2')
-                ->slugsShouldBeNoLongerThan(100);
+                ->saveSlugsTo('slug');
     }
 
     public function translations(): HasMany
     {
         return $this->hasMany(TourTranslation::class);
-    }
-
-    public function descriptionTranslations(): HasMany
-    {
-        return $this->hasMany(TourTranslation::class, 'tour_id', 'id')->where('field', '=', 'description');
     }
 
     public function images(): HasMany
@@ -42,7 +35,7 @@ class Tour extends Model
         return $this->hasOne(TourImage::class)->ofMany([
             'position' => 'MIN'
         ], function($query) {
-            $query->where('is_saved', true);
+            $query->where('position', '!=', null);
         });
     }
 }
