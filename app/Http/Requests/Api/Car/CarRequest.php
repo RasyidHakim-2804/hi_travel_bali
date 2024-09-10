@@ -27,7 +27,7 @@ class CarRequest extends FormRequest
             'is_active' => 'required|boolean',
             'image'     => 'required|image|max:2048|mimes:png,jpg,jpeg',
 
-            'facilities'    => 'array',
+            'facilities'    => 'required|array',
             'facilities.*'  => 'numeric|distinct|exists:facilities,id'
         ];
 
