@@ -59,10 +59,9 @@ class AdminCarController extends Controller
         }
     }
 
-    public function update(CarRequest $request, $slug)
+    public function update(CarRequest $request, Car $car)
     {
         try {
-            $car                = new Car();
             $car->name          = $request->name;
             $car->price         = $request->price;
             $car->is_active     = $request->is_active;
@@ -93,6 +92,7 @@ class AdminCarController extends Controller
             DB::beginTransaction();
 
             $car->facilities()->detach();
+            $car->driver()->detach();
             $car->delete();
 
             DB::commit();
