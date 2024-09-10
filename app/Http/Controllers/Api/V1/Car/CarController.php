@@ -20,7 +20,8 @@ class CarController extends Controller
                     AllowedSort::field('recomended', 'max_person'),
                 ])
                 ->allowedFilters([
-                    AllowedFilter::scope('passenger_count', 'passengerCount')
+                    AllowedFilter::scope('passenger_count', 'passengerCount'),
+                    AllowedFilter::scope('distance', 'distance')
                 ])
                 ->with([
                     'facilities'

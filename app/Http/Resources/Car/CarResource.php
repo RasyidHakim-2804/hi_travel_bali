@@ -24,8 +24,8 @@ class CarResource extends JsonResource
             'max_person'    => $this->max_person,
             'image'         => $this->imageUrl('image'),
             
-            $this->mergeWhen(($this->price_per_km != null), [
-                'price_per_km'  => $this->price_per_km,
+            $this->mergeWhen(($this->trip_price != null), [
+                'trip_price'  => $this->trip_price,
             ]),
 
             'facilities'    => ListFacilityResource::collection($this->whenLoaded('facilities')),

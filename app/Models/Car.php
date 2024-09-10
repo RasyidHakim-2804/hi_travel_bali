@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\ImageStorageTrait;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,5 +44,17 @@ class Car extends Model
     public function scopePassengerCount($query, int $passengerCount)
     {
         $query->where('max_person', '>=', $passengerCount);
+    }
+
+    public function scopeDistance($query, $distance)
+    {
+        if ($distance < 1) {
+            throw new Exception('the distance cannot be smaller than 1');
+        }
+
+        $query->select(
+            '*',
+            DB::raw('price * ' . $distance . ' as trip_price')
+        );
     }
 }
