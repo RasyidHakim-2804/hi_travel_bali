@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('image');
+            $table->unsignedInteger('max_person');
             $table->boolean('is_active')->default(1);
             $table->unsignedDecimal('price', 11, 2);
             $table->timestamps();
