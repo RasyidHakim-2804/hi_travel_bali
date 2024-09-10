@@ -31,7 +31,7 @@ class TourRequest extends FormRequest
             'description'   => 'required|array',
             'meta'          => 'required|array',
 
-            'locations'     => 'array',
+            'locations'     => 'required|array',
             'locations.*'   => 'numeric|distinct|exists:locations,id'
         ];
 
