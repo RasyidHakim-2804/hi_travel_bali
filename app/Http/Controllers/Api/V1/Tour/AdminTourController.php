@@ -3,107 +3,153 @@
 namespace App\Http\Controllers\Api\V1\Tour;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\Product\Tour\CreateTourRequest;
-use App\Http\Requests\Api\Product\Tour\UpdateTourRequest;
-use App\Http\Resources\Common\SuccessResource;
-use App\Http\Resources\Product\ProductResource;
-use App\Models\Product;
-use App\Models\Translation\ProductTranslation;
+use App\Http\Requests\Api\Tour\TourRequest;
+use App\Http\Resources\Tour\AdminTourResource;
+use App\Models\Tour;
 use App\Services\Images\ImageService;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
 
 class AdminTourController extends Controller
 {
+    use JsonResponsesTrait;
+
     public function index()
     {
-        $tours = Product::tour()->paginate(25);
-
-        return ProductResource::collection($tours);
+        return AdminTourResource::collection(
+            Tour::with('variants')->paginate(25)
+        );
     }
 
-    public function show($slug)
+    public function show(Tour $tour)
     {
-        $tour = Product::with(['locations','translations'])
-                ->tour($slug)
-                ->firstOrFail();
-
-        return new ProductResource($tour);
+        return $this->successGet(
+            new AdminTourResource(
+                $tour->load([
+                    'locations',
+                    'translations',
+                    'variants'
+                ])
+            )
+        );
     }
 
-    public function store(CreateTourRequest $request)
-    {
-        try {
-            DB::beginTransaction();
-
-            $tour               = new Product();
-
-            $tour->type         = $tour::TOUR_TYPE;
-            $tour->name         = $request->name;
-            $tour->max_person   = $request->max_person;
-            $tour->idr_price    = $request->idr_price;
-            $tour->save();
-
-            $tour->locations()->attach($request->locations);
-
-            $this->setTranslation($request->validated(), $tour->id);
-
-            DB::commit();
-
-            return new SuccessResource(201);
-
-        } catch (\Throwable $th) {
-            
-            DB::rollBack();
-
-            throw $th;
-        }
-    }
-
-    public function update(UpdateTourRequest $request, $slug)
+    public function store(TourRequest $request)
     {
         try {
             DB::beginTransaction();
 
-            $tour = Product::tour($slug)->firstOrFail();
-
+            $tour               = new Tour();
             $tour->name         = $request->name;
             $tour->max_person   = $request->max_person;
-            $tour->idr_price    = $request->idr_price;
             $tour->is_active    = $request->is_active;
             $tour->save();
 
-            $tour->locations()->sync($request['locations']);
+            $tour->locations()->attach($request->locations);
+            $this->setPrice($tour, $request);
 
-            $this->setTranslation($request, $tour->id);
+            foreach ($request->validated('description') as $lang => $description) {
+                $this->setTranslations($tour, $lang, 'description', $description);
+            }
+
+            foreach ($request->validated('meta') as $lang => $meta) {
+                $this->setTranslations($tour, $lang, 'meta', $meta);
+            }
 
             DB::commit();
 
-            return new SuccessResource(200);
+            return $this->successStore();
+
+        } catch (\Exception $e) {
+            
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+        }
+    }
+
+    public function update(TourRequest $request, Tour $tour)
+    {
+        try {
+            DB::beginTransaction();
+
+            $tour->name         = $request->name;
+            $tour->max_person   = $request->max_person;
+            $tour->is_active    = $request->is_active;
+            $tour->save();
+
+            $tour->locations()->attach($request->locations);
+            $this->setPrice($tour, $request);
+
+            foreach ($request->validated('description') as $lang => $description) {
+                $this->setTranslations($tour, $lang, 'description', $description);
+            }
+
+            foreach ($request->validated('meta') as $lang => $meta) {
+                $this->setTranslations($tour, $lang, 'meta', $meta);
+            }
+
+            DB::commit();
+
+            return $this->successResponse();
+
+        } catch (\Exception $e) {
+            
+            DB::rollBack();
+
+            return $this->errorServer($e->getMessage());
+        }
+    }
+
+    public function destroy(Tour $tour)
+    {
+        try {
+            DB::beginTransaction();
+
+            $tour = $tour->load([
+                'images'
+            ]);
+
+            foreach ($tour->images as $image) {
+                $imageService = new ImageService($image->imagePath());
+                $imageService->delete($image->image);
+                $image->delete();
+            }
+
+            $tour->variants()->delete();
+            $tour->delete();
+
+            DB::commit();
+
+            return $this->successResponse();
 
         } catch (\Throwable $th) {
             
             DB::rollBack();
-
+            
             throw $th;
         }
     }
 
-    public function destroy($slug)
+    // Private function
+
+    protected function setTranslations(Tour $tour, $lang, $field, $translation)
     {
-        
+        $tourTranslation = $tour->translations()->language($lang)->field($field)->firstOrNew();
+
+        $tourTranslation->tour_id      = $tour->id;
+        $tourTranslation->language     = $lang;
+        $tourTranslation->field        = $field;
+        $tourTranslation->translation  = $translation;
+        $tourTranslation->save();
     }
 
-    private function setTranslation( array $request, $tour_id)
+    private function setPrice(Tour $tour, $request)
     {
-        foreach ( ['id', 'en'] as $lang) {
-            $translation                = ProductTranslation::where('lang', $lang)
-                                            ->where('product_id', $tour_id)
-                                            ->firstOrNew();
-                                            
-            $translation->description   = $request[$lang . '_description'];
-            $translation->product_id    = $tour_id;
-            $translation->lang          = $lang;
-            $translation->save();
-        }
+        $price              = $tour->variants()->where('is_default', '=', true)->firstOrNew();
+        $price->price       = $request->price;
+        $price->tour_id     = $tour->id;
+        $price->is_default  = true;
+        $price->save();
     }
 }
