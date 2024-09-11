@@ -116,6 +116,8 @@ class AdminTourController extends Controller
                 $image->delete();
             }
 
+            $tour->locations()->detach();
+            $tour->translations()->delete();
             $tour->variants()->delete();
             $tour->delete();
 
