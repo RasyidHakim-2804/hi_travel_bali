@@ -22,14 +22,14 @@ class TourController extends Controller
         $tours = QueryBuilder::for(Tour::class)
                 ->defaultSort('max_person')
                 ->allowedSorts([
-                    AllowedSort::field('price', 'idr_price'),
+                    AllowedSort::field('price'),
                     AllowedSort::field('recomended', 'max_person'),
                 ])
                 ->with([
                     'thumbnailImage',
                     'locations',
-                    'thumbnailVariant',
                 ])
+                ->selectVariantPrice()
                 ->active()
                 ->paginate(25);
 
@@ -56,8 +56,8 @@ class TourController extends Controller
             Tour::with([
                 'thumbnailImage',
                 'locations',
-                'thumbnailVariant',
             ])
+            ->selectVariantPrice()
             ->active()
             ->orderBy('id', 'DESC')
             ->limit(4)

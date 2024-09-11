@@ -22,9 +22,9 @@ class TourResource extends JsonResource
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
 
-            'price'     => $this->whenLoaded(
-                'thumbnailVariant',
-                fn() => $this->thumbnailVariant->price
+            'price'     => $this->when(
+                $this->price != null,
+                $this->price
             ),
 
             'description' => $this->whenLoaded(
