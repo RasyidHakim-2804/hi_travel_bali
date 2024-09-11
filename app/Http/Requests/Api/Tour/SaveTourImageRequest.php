@@ -22,7 +22,7 @@ class SaveTourImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images_id'      => 'array|max:5',
+            'images_id'      => 'required|array|max:5',
             'images_id.*'    => [
                 'required',
                 'distinct',
