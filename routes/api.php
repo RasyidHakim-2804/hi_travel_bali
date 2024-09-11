@@ -54,9 +54,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
-     // Webhook
-     Route::post('/xendit-webhook/invoice', XenditInvoiceWebhookController::class);
-     Route::post('/xendit-webhook/payout-link', XenditPayoutLinkWebhookController::class); 
+    // Webhook
+    Route::post('/xendit-webhook/invoice', XenditInvoiceWebhookController::class);
+    Route::post('/xendit-webhook/payout-link', XenditPayoutLinkWebhookController::class); 
 
     // Public - Article
     Route::get('/top-articles', [ArticleController::class, 'top']);
@@ -67,8 +67,8 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::post('/cars', [CarController::class, 'list']);
 
     //Tour
-    Route::post('/tours', [TourController::class, 'list']);
-    Route::get('/tours/{slug}', [TourController::class, 'show']);
+    Route::get('/tours', [TourController::class, 'list']);
+    Route::get('/tours/{tour:slug}', [TourController::class, 'show']);
     Route::get('/popular-tours', [TourController::class, 'popular']);
 
     Route::prefix('/admins')->group(function () {
