@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
@@ -31,12 +32,7 @@ class Tour extends Model
     {
         return $this->hasMany(TourVariant::class, 'tour_id', 'id');
     }
-
-    public function thumbnailVariant()
-    {
-        return $this->hasOne(TourVariant::class, 'tour_id', 'id')->ofMany('price', 'MIN');
-    }
-
+    
     public function translations(): HasMany
     {
         return $this->hasMany(TourTranslation::class);
@@ -59,5 +55,12 @@ class Tour extends Model
     public function scopeActive($query)
     {
         $query->where('is_active', '=', 1);
+    }
+
+    public function scopeSelectVariantPrice($query)
+    {
+        $query->addSelect('*',DB::raw(
+            "(select price from tour_variants where tour_id = tours.id order by price asc limit 1) as price"
+        ));
     }
 }
