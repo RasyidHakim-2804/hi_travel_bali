@@ -22,7 +22,7 @@ class StoreTourImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images'      => 'required|image|max:2048|mimes:png,jpg,jpeg',
+            'image'      => 'required|image|max:2048|mimes:png,jpg,jpeg',
         ];
     }
 }
