@@ -17,7 +17,9 @@ class TourImageResource extends JsonResource
         return [
             'id'         => $this->id,
             'position'   => $this->position,
-            'path'       => $this->path,
+            'image'      => $this->imageUrl('image'),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
