@@ -22,11 +22,11 @@ class TourImage extends Model
     
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Tour::class);
     }
 
-    public function scopeSaved(Builder $query, bool $saved = true)
+    public function scopeSaved(Builder $query,)
     {
-        $query->where('is_saved', '=', $saved);
+        $query->where('position', '!=', null);
     }
 }
