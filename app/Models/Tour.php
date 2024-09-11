@@ -55,4 +55,9 @@ class Tour extends Model
             $query->where('position', '!=', null);
         });
     }
+
+    public function scopeActive($query)
+    {
+        $query->where('is_active', '=', 1);
+    }
 }
