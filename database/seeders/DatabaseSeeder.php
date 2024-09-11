@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         (new LanguageSeeder)->run();
-        (new AdminSeeder)->run();
+        // (new AdminSeeder)->run();
 
         (new LocationSeeder)->run();
         (new FacilitySeeder)->run();
