@@ -5,16 +5,21 @@ namespace App\Http\Controllers\Api\V1\Tour;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Product\Tour\UserListRequest;
 use App\Http\Resources\Api\V1\Product\ProductResource;
+use App\Http\Resources\Tour\TourResource;
 use App\Models\Product;
+use App\Models\Tour;
+use App\Traits\JsonResponsesTrait;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class TourController extends Controller
 {
-    public function list(UserListRequest $request)
+    use JsonResponsesTrait;
+
+    public function list()
     {
-        $tours = QueryBuilder::for(Product::class)
+        $tours = QueryBuilder::for(Tour::class)
                 ->defaultSort('max_person')
                 ->allowedSorts([
                     AllowedSort::field('price', 'idr_price'),
@@ -22,41 +27,41 @@ class TourController extends Controller
                 ])
                 ->with([
                     'thumbnailImage',
-                    'locations'
+                    'locations',
+                    'thumbnailVariant',
                 ])
-                ->tour()
                 ->active()
-                ->where('max_person', '>=', $request->tourist_numbers)
                 ->paginate(25);
 
-        return ProductResource::collection($tours);
+        return TourResource::collection($tours);
     }
 
-    public function show($slug)
+    public function show(Tour $tour)
     {
-        $tour = Product::with([
+        $tour = $tour->load([
                     'locations',
-                    'translate',
-                    'images' => fn($query) => $query->where('is_saved',true)
-                ])
-                ->tour($slug)
-                ->active()
-                ->firstOrFail();
+                    'variants',
+                    'translations' => fn($query) => $query->language(),
+                    'images' => fn($query) => $query->saved()
+                ]);
 
-        return new ProductResource($tour);
+        return $this->successGet(
+            new TourResource($tour)
+        );
     }
 
     public function popular()
     {
-        $tours = Product::with([
-                    'thumbnailImage',
-                    'locations'
-                ])
-                ->tour()
-                ->active()
-                ->orderBy('popular', 'DESC')
-                ->paginate(4);
-        
-        return ProductResource::collection($tours);
+        return TourResource::collection(
+            Tour::with([
+                'thumbnailImage',
+                'locations',
+                'thumbnailVariant',
+            ])
+            ->active()
+            ->orderBy('id', 'DESC')
+            ->limit(4)
+            ->get()
+        );
     }
 }
