@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class PivotProductLocationSeeder extends Seeder
+class PivotTourLocationSeeder extends Seeder
 {
     private $tourIds = [8,9,10,11];
 
@@ -15,10 +15,10 @@ class PivotProductLocationSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach ($this->tourIds as $id) {
+        for ($i=1; $i <= 4 ; $i++) { 
             for ($i = 1; $i <= rand(1,5) ; $i++) { 
                 DB::table('pivot_tour_location')->insert([
-                    'tour_id'       => $id,
+                    'tour_id'       => $i,
                     'location_id'   => $i,
                     'created_at'    => now(),
                     'updated_at'    => null,

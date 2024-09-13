@@ -15,44 +15,35 @@ class TourSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('tours')->insert([
-            'id'            => 1,
-            'name'          => 'West Nusa Penida Tour',
-            'slug'          => Str::slug('West Nusa Penida Tour'),
-            'max_person'    => 4,
-            'price'     => 400000,
-            'created_at'    => now(),
-            'updated_at'    => null,
-        ]);
+        $names = [
+            'West Nusa Penida Tour',
+            'Nusa Penida East Tour',
+            'Bedugul & Natural Treasures',
+            'Lempuyang, Gate of Heaven & Snorkeling'
+        ];
 
-        DB::table('tours')->insert([
-            'id'            => 2,
-            'name'          => 'Nusa Penida East Tour',
-            'slug'          => Str::slug('Nusa Penida East Tour'),
-            'max_person'    => 4,
-            'price'     => 425000,
-            'created_at'    => now(),
-            'updated_at'    => null,
-        ]);
+        foreach ($names as $tour_id => $name) {
+            
+            $tour_id = $tour_id +1;
 
-        DB::table('tours')->insert([
-            'id'            => 3,
-            'name'          => 'Bedugul & Natural Treasures',
-            'slug'          => Str::slug('Bedugul & Natural Treasures'), 
-            'max_person'    => 4,
-            'price'     => 425000,
-            'created_at'    => now(),
-            'updated_at'    => null,
-        ]);
+            DB::table('tours')->insert([
+                'id'            => $tour_id,
+                'name'          => $name,
+                'slug'          => Str::slug($name),
+                'max_person'    => 4,
+                'is_active'     => 1,
+                'created_at'    => now(),
+                'updated_at'    => null,
+            ]);
 
-        DB::table('tours')->insert([
-            'id'            => 4,
-            'name'          => 'Lempuyang, Gate of Heaven & Snorkeling',
-            'slug'          => Str::slug('Lempuyang, Gate of Heaven & Snorkeling'),    
-            'max_person'    => 4,
-            'price'     => 670000,
-            'created_at'    => now(),
-            'updated_at'    => null,
-        ]);
+            DB::table('tour_variants')->insert([
+                'id'            => $tour_id,
+                'tour_id'       => $tour_id,
+                'is_default'    => 1,
+                'price'         => rand(300000, 400000),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+        }
     }
 }
