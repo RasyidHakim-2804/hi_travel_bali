@@ -52,10 +52,6 @@ class AdminTourController extends Controller
                 $this->setTranslations($tour, $lang, 'description', $description);
             }
 
-            foreach ($request->validated('meta') as $lang => $meta) {
-                $this->setTranslations($tour, $lang, 'meta', $meta);
-            }
-
             DB::commit();
 
             return $this->successStore();
@@ -83,10 +79,6 @@ class AdminTourController extends Controller
 
             foreach ($request->validated('description') as $lang => $description) {
                 $this->setTranslations($tour, $lang, 'description', $description);
-            }
-
-            foreach ($request->validated('meta') as $lang => $meta) {
-                $this->setTranslations($tour, $lang, 'meta', $meta);
             }
 
             DB::commit();

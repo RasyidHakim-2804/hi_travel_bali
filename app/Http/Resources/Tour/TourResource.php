@@ -32,11 +32,6 @@ class TourResource extends JsonResource
                 fn() => $this->translations->where('field','description')->first()->translation
             ),
 
-            'meta' => $this->whenLoaded(
-                'translations',
-                fn() => $this->translations->where('field','meta')->first()->translation
-            ),
-
             'images'          => TourImageResource::collection($this->whenLoaded('images')),
             'thumbnail_image' => new TourImageResource($this->whenLoaded('thumbnailImage')),
             'locations'       => LocationResource::collection($this->whenLoaded('locations')),

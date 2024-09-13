@@ -29,13 +29,6 @@ class AdminTourResource extends JsonResource
                     $this->translations->where('field','description')
                 )
             ),
-
-            'meta' => $this->whenLoaded(
-                'translations',
-                fn() => TourTranslationResource::collection(
-                    $this->translations->where('field','meta')
-                )
-            ),
             
             'locations'       => LocationResource::collection($this->whenLoaded('locations')),
         ];;

@@ -29,7 +29,6 @@ class TourRequest extends FormRequest
             'is_active'     => 'required|boolean',
 
             'description'   => 'required|array',
-            'meta'          => 'required|array',
 
             'locations'     => 'required|array',
             'locations.*'   => 'numeric|distinct|exists:locations,id'
@@ -37,7 +36,6 @@ class TourRequest extends FormRequest
 
         foreach (Language::code() as $lang) {
             $rule['description.' . $lang]   = 'required|string|max:200';
-            $rule['meta.' . $lang]          = 'required|string|max:200';
         }
 
         return $rule;
