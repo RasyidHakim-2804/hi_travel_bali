@@ -22,10 +22,11 @@ class CarRequest extends FormRequest
     public function rules(): array
     {
         $rule = [
-            'name'      => 'required|string|max:255',
-            'price'     => 'required|numeric|max:100000000|min:0',
-            'is_active' => 'required|boolean',
-            'image'     => 'required|image|max:2048|mimes:png,jpg,jpeg',
+            'name'       => 'required|string|max:255',
+            'price'      => 'required|numeric|max:100000000|min:0',
+            'is_active'  => 'required|boolean',
+            'image'      => 'required|image|max:2048|mimes:png,jpg,jpeg',
+            'max_person' => 'required|numeric|min:1|max:100',
 
             'facilities'    => 'required|array',
             'facilities.*'  => 'numeric|distinct|exists:facilities,id'
