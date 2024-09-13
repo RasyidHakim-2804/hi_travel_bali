@@ -8,6 +8,7 @@ use App\Http\Resources\Common\SuccessResource;
 use App\Http\Resources\Location\LocationResource;
 use App\Models\Location;
 use App\Traits\JsonResponsesTrait;
+use Illuminate\Support\Facades\DB;
 
 class AdminLocationController extends Controller
 {
@@ -51,9 +52,18 @@ class AdminLocationController extends Controller
 
     public function destroy(Location $location)
     {
-        $location->tours()->detach();
-        $location->delete();
+        try {
+            DB::beginTransaction();
 
-        return $this->successResponse();
+            $location->tours()->detach();
+            $location->delete();
+
+            DB::commit();
+            
+            return $this->successResponse();
+            
+        } catch (\Exception $e) {
+            return $this->errorServer($e->getMessage());
+        }
     }
 }
