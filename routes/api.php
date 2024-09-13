@@ -107,9 +107,9 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
             //Location
             Route::get('/locations', [AdminLocationController::class, 'index']);
             Route::post('/locations', [AdminLocationController::class, 'store']);
-            Route::get('/locations/{location:slug}', [AdminLocationController::class, 'show']);
-            Route::put('/locations/{location:slug}', [AdminLocationController::class, 'update']);
-            Route::delete('/locations/{location:slug}', [AdminLocationController::class, 'destroy']);
+            Route::get('/locations/{location}', [AdminLocationController::class, 'show']);
+            Route::put('/locations/{location}', [AdminLocationController::class, 'update']);
+            Route::delete('/locations/{location}', [AdminLocationController::class, 'destroy']);
 
             //Facility
             Route::get('/facilities', [AdminFacilityController::class, 'index']);
