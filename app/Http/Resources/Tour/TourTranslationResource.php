@@ -14,6 +14,14 @@ class TourTranslationResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'            => $this->id,
+            'tour_id'       => $this->tour_id,
+            'language'      => $this->language,
+            'field'         => $this->field,
+            'translation'   => $this->translation,
+            'created_at'    => $this->created_at,
+            'updated_at'    => $this->updated_at,
+        ];
     }
 }
