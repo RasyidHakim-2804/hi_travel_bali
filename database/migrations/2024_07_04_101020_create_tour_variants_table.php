@@ -22,7 +22,6 @@ return new class extends Migration
             $table->boolean('is_default');
             $table->unsignedDecimal('price', 11, 2);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

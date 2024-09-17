@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedInteger('max_person');
             $table->boolean('is_active')->default(1);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
