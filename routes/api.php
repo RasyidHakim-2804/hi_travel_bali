@@ -109,6 +109,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
             //Location
             Route::get('/locations', [AdminLocationController::class, 'index']);
+            Route::get('/locations-all', [AdminLocationController::class, 'all']);
             Route::post('/locations', [AdminLocationController::class, 'store']);
             Route::get('/locations/{location}', [AdminLocationController::class, 'show']);
             Route::put('/locations/{location}', [AdminLocationController::class, 'update']);
