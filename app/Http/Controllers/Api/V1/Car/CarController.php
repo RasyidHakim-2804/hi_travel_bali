@@ -24,7 +24,7 @@ class CarController extends Controller
                     AllowedFilter::scope('distance', 'distance')
                 ])
                 ->with([
-                    'facilities'
+                    'facilities.translations' => fn($query) => $query->language()
                 ])
                 ->active()
                 ->paginate(25);
