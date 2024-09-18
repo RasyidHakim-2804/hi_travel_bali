@@ -113,6 +113,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
             //Facility
             Route::get('/facilities', [AdminFacilityController::class, 'index']);
+            Route::get('/facilities-all', [AdminFacilityController::class, 'all']);
             Route::post('/facilities', [AdminFacilityController::class, 'store']);
             Route::get('/facilities/{facility}', [AdminFacilityController::class, 'show']);
             Route::put('/facilities/{facility}', [AdminFacilityController::class, 'update']);
