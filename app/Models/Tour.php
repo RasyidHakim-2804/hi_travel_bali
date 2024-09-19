@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -62,5 +63,17 @@ class Tour extends Model
         $query->addSelect('*',DB::raw(
             "(select price from tour_variants where tour_id = tours.id order by price asc limit 1) as price"
         ));
+    }
+
+    public function scopeLocationId(Builder $query, $location_id)
+    {
+        $query->whereHas('locations', function(Builder $query) use($location_id) {
+            $query->where('location_id', '=', $location_id);
+        });
+    }
+    
+    public function scopeTouristNumbers(Builder $query, $person)
+    {
+        return $query->where('max_person', '>=', $person);
     }
 }
