@@ -94,10 +94,12 @@ class AdminCarController extends Controller
             DB::beginTransaction();
 
             $imageService = new ImageService($car->imagePath());
-            $imageService->delete($car->image);
-
+            $image        = $car->image;
+        
             $car->facilities()->detach();
             $car->delete();
+        
+            $imageService->delete($image);
 
             DB::commit();
 
