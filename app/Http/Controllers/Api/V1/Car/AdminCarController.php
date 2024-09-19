@@ -97,7 +97,6 @@ class AdminCarController extends Controller
             $imageService->delete($car->image);
 
             $car->facilities()->detach();
-            $car->driver()->detach();
             $car->delete();
 
             DB::commit();
