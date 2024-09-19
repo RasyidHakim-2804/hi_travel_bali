@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Tour;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -24,6 +25,10 @@ class TourController extends Controller
                 ->allowedSorts([
                     AllowedSort::field('price'),
                     AllowedSort::field('recomended', 'max_person'),
+                ])
+                ->allowedFilters([
+                    AllowedFilter::scope('tourist_numbers'),
+                    AllowedFilter::scope('location_id')
                 ])
                 ->with([
                     'thumbnailImage',
