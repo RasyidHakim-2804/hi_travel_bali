@@ -74,7 +74,7 @@ class AdminTourController extends Controller
             $tour->is_active    = $request->is_active;
             $tour->save();
 
-            $tour->locations()->attach($request->locations);
+            $tour->locations()->sync($request->locations);
             $this->setPrice($tour, $request);
 
             foreach ($request->validated('description') as $lang => $description) {
