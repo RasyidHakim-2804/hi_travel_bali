@@ -21,6 +21,7 @@ class TourResource extends JsonResource
             'slug'          => $this->slug,
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
+            'is_varied'     => $this->is_varied,
 
             'price'     => $this->when(
                 $this->price != null,

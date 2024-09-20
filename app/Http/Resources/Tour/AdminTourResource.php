@@ -26,6 +26,7 @@ class AdminTourResource extends JsonResource
             ),
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
+            'is_varied'     => $this->is_varied,
 
             'description' => $this->whenLoaded(
                 'translations',
