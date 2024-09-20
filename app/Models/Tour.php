@@ -33,7 +33,12 @@ class Tour extends Model
     {
         return $this->hasMany(TourVariant::class, 'tour_id', 'id');
     }
-    
+
+    public function defaultVariant(): HasOne
+    {
+        return $this->hasOne(TourVariant::class, 'tour_id', 'id')->where('is_default', '=', 1);
+    }
+
     public function translations(): HasMany
     {
         return $this->hasMany(TourTranslation::class);
@@ -58,10 +63,10 @@ class Tour extends Model
         $query->where('is_active', '=', 1);
     }
 
-    public function scopeSelectVariantPrice($query)
+    public function scopeSelectThumbnailVariantPrice($query)
     {
         $query->addSelect('*',DB::raw(
-            "(select price from tour_variants where tour_id = tours.id order by price asc limit 1) as price"
+            "(select price from tour_variants where tour_id = tours.id and deleted_at is null order by price asc limit 1) as price"
         ));
     }
 
@@ -71,7 +76,7 @@ class Tour extends Model
             $query->where('location_id', '=', $location_id);
         });
     }
-    
+
     public function scopeTouristNumbers(Builder $query, $person)
     {
         return $query->where('max_person', '>=', $person);
