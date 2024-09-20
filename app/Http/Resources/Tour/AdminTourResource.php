@@ -19,7 +19,11 @@ class AdminTourResource extends JsonResource
             'id'            => $this->id,
             'name'          => $this->name,
             'slug'          => $this->slug,
-            'price'         => $this->variants->first()->price,
+            'price'         => $this->whenLoaded(
+                'defaultVariant',
+                fn() => $this->defaultVariant->price,
+                $this->price
+            ),
             'max_person'    => $this->max_person,
             'is_active'     => $this->is_active,
 
@@ -29,8 +33,10 @@ class AdminTourResource extends JsonResource
                     $this->translations->where('field','description')
                 )
             ),
-            
-            'locations'       => LocationResource::collection($this->whenLoaded('locations')),
-        ];;
+
+            'variants'      => TourVariantResource::collection($this->whenLoaded('variants')),
+
+            'locations'     => LocationResource::collection($this->whenLoaded('locations')),
+        ];
     }
 }
