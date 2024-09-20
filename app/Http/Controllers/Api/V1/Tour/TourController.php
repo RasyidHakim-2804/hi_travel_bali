@@ -34,7 +34,7 @@ class TourController extends Controller
                     'thumbnailImage',
                     'locations',
                 ])
-                ->selectVariantPrice()
+                ->selectThumbnailVariantPrice()
                 ->active()
                 ->paginate(25);
 
@@ -45,9 +45,9 @@ class TourController extends Controller
     {
         $tour = $tour->load([
                     'locations',
-                    'variants',
-                    'translations' => fn($query) => $query->language(),
-                    'images' => fn($query) => $query->saved()
+                    'variants.translations' => fn($query) => $query->language(),
+                    'translations'          => fn($query) => $query->language(),
+                    'images'                => fn($query) => $query->saved()
                 ]);
 
         return $this->successGet(
@@ -62,7 +62,7 @@ class TourController extends Controller
                 'thumbnailImage',
                 'locations',
             ])
-            ->selectVariantPrice()
+            ->selectThumbnailVariantPrice()
             ->active()
             ->orderBy('id', 'DESC')
             ->limit(4)
