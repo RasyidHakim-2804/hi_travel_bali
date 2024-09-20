@@ -20,7 +20,14 @@ class TourVariantResource extends JsonResource
             'is_default'    => $this->is_default,
             'price'         => $this->price,
             'created_at'    => $this->created_at,
-            'updated_at'    => $this->updated_at
-        ];;
+            'updated_at'    => $this->updated_at,
+
+            'description' => $this->whenLoaded(
+                'translations',
+                fn() => TourVariantTranslationResource::collection(
+                    $this->translations->where('field','description')
+                )
+            ),
+        ];
     }
 }
