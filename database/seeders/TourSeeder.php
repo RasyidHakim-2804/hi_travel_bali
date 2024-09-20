@@ -36,26 +36,6 @@ class TourSeeder extends Seeder
                 'created_at'    => now(),
                 'updated_at'    => null,
             ]);
-
-            // Variants
-
-            DB::table('tour_variants')->insert([
-                'tour_id'       => $tour_id,
-                'name'          => 'Dewasa',
-                'is_default'    => 0,
-                'price'         => rand(300000, 400000),
-                'created_at'    => now(),
-                'updated_at'    => now(),
-            ]);
-
-            DB::table('tour_variants')->insert([
-                'tour_id'       => $tour_id,
-                'name'          => 'Anak',
-                'is_default'    => 0,
-                'price'         => rand(300000, 400000),
-                'created_at'    => now(),
-                'updated_at'    => now(),
-            ]);
         }
     }
 }
