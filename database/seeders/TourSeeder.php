@@ -23,7 +23,7 @@ class TourSeeder extends Seeder
         ];
 
         foreach ($names as $tour_id => $name) {
-            
+
             $tour_id = $tour_id +1;
 
             DB::table('tours')->insert([
@@ -32,14 +32,26 @@ class TourSeeder extends Seeder
                 'slug'          => Str::slug($name),
                 'max_person'    => 4,
                 'is_active'     => 1,
+                'is_varied'     => 1,
                 'created_at'    => now(),
                 'updated_at'    => null,
             ]);
 
+            // Variants
+
             DB::table('tour_variants')->insert([
-                'id'            => $tour_id,
                 'tour_id'       => $tour_id,
-                'is_default'    => 1,
+                'name'          => 'Dewasa',
+                'is_default'    => 0,
+                'price'         => rand(300000, 400000),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+
+            DB::table('tour_variants')->insert([
+                'tour_id'       => $tour_id,
+                'name'          => 'Anak',
+                'is_default'    => 0,
                 'price'         => rand(300000, 400000),
                 'created_at'    => now(),
                 'updated_at'    => now(),
