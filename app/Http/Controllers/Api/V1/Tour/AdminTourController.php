@@ -47,6 +47,7 @@ class AdminTourController extends Controller
             $tour->name         = $request->name;
             $tour->max_person   = $request->max_person;
             $tour->is_active    = $request->is_active;
+            $tour->is_varied    = $request->is_varied;
             $tour->save();
 
             $tour->locations()->attach($request->locations);
@@ -81,6 +82,7 @@ class AdminTourController extends Controller
             $tour->name         = $request->name;
             $tour->max_person   = $request->max_person;
             $tour->is_active    = $request->is_active;
+            $tour->is_varied    = $request->is_varied;
             $tour->save();
 
             $tour->locations()->sync($request->locations);
