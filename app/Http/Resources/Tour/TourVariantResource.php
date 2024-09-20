@@ -24,9 +24,7 @@ class TourVariantResource extends JsonResource
 
             'description' => $this->whenLoaded(
                 'translations',
-                fn() => TourVariantTranslationResource::collection(
-                    $this->translations->where('field','description')
-                )
+                fn() => $this->translations->where('field','description')->first()->translation
             ),
         ];
     }
