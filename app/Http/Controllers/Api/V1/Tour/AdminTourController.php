@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Tour\TourRequest;
 use App\Http\Resources\Tour\AdminTourResource;
 use App\Models\Tour;
+use App\Models\TourVariant;
+use App\Models\TourVariantTranslation;
 use App\Services\Images\ImageService;
 use App\Traits\JsonResponsesTrait;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +19,7 @@ class AdminTourController extends Controller
     public function index()
     {
         return AdminTourResource::collection(
-            Tour::with('variants')->paginate(25)
+            Tour::selectThumbnailVariantPrice()->paginate(25)
         );
     }
 
@@ -28,7 +30,9 @@ class AdminTourController extends Controller
                 $tour->load([
                     'locations',
                     'translations',
-                    'variants'
+                    'defaultVariant',
+                    'variants'  => fn($query) => $query->where('is_default', '=', false),
+                    'variants.translations'
                 ])
             )
         );
@@ -46,10 +50,15 @@ class AdminTourController extends Controller
             $tour->save();
 
             $tour->locations()->attach($request->locations);
-            $this->setPrice($tour, $request);
 
             foreach ($request->validated('description') as $lang => $description) {
                 $this->setTranslations($tour, $lang, 'description', $description);
+            }
+
+            if ($request->is_varied) {
+                $this->setVariants($tour, $request);
+            } else {
+                $this->setDefaultVariant($tour, $request);
             }
 
             DB::commit();
@@ -57,7 +66,7 @@ class AdminTourController extends Controller
             return $this->successStore();
 
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return $this->errorServer($e->getMessage());
@@ -75,10 +84,15 @@ class AdminTourController extends Controller
             $tour->save();
 
             $tour->locations()->sync($request->locations);
-            $this->setPrice($tour, $request);
 
             foreach ($request->validated('description') as $lang => $description) {
                 $this->setTranslations($tour, $lang, 'description', $description);
+            }
+
+            if ($request->is_varied) {
+                $this->setVariants($tour, $request);
+            } else {
+                $this->setDefaultVariant($tour, $request);
             }
 
             DB::commit();
@@ -86,7 +100,7 @@ class AdminTourController extends Controller
             return $this->successResponse();
 
         } catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             return $this->errorServer($e->getMessage());
@@ -118,14 +132,16 @@ class AdminTourController extends Controller
             return $this->successResponse();
 
         } catch (\Throwable $th) {
-            
+
             DB::rollBack();
-            
+
             throw $th;
         }
     }
 
-    // Private function
+    /////////////////////
+    // Private function//
+    /////////////////////
 
     protected function setTranslations(Tour $tour, $lang, $field, $translation)
     {
@@ -138,12 +154,60 @@ class AdminTourController extends Controller
         $tourTranslation->save();
     }
 
-    private function setPrice(Tour $tour, $request)
+    private function setDefaultVariant(Tour $tour, $request)
     {
-        $price              = $tour->variants()->where('is_default', '=', true)->firstOrNew();
-        $price->price       = $request->price;
-        $price->tour_id     = $tour->id;
-        $price->is_default  = true;
-        $price->save();
+        $variant              = $tour->variants()->where('is_default', '=', true)->firstOrNew();
+        $variant->name        = $tour->name;
+        $variant->price       = $request->price;
+        $variant->tour_id     = $tour->id;
+        $variant->is_default  = true;
+        $variant->save();
+
+        TourVariantTranslation::whereRelation('tourVariant', 'tour_id', '=', $tour->id)->delete();
+
+        $tour->variants()->where('is_default', '=', false)->delete();
+    }
+
+    private function setVariants(Tour $tour, $request)
+    {
+        $unDeletesId = [];
+
+        foreach ($request->variants as $requestVariant) {
+
+            if ( isset($requestVariant['id']) ) {
+                $variant = $tour->variants()->where('id', '=', $requestVariant['id'])->firstOrNew();
+            } else {
+                $variant = new TourVariant();
+            }
+
+            $variant->name        = $tour->name;
+            $variant->price       = $requestVariant['price'];
+            $variant->tour_id     = $tour->id;
+            $variant->is_default  = false;
+            $variant->save();
+
+            foreach ($requestVariant['descriptions'] as $lang => $description) {
+                $this->setVariantTranslations($variant, $lang, 'description', $description);
+            }
+
+            $unDeletesId[] = $variant->id;
+        }
+
+        TourVariantTranslation::whereHas('tourVariant', function($query) use($tour, $unDeletesId) {
+            $query->where('tour_id', '=', $tour->id)->whereNotIn('id', $unDeletesId);
+        })->delete();
+
+        $tour->variants()->whereNotIn('id', $unDeletesId)->delete();
+    }
+
+    public function setVariantTranslations(TourVariant $variant, $lang, $field, $translation)
+    {
+        $variantTranslation = $variant->translations()->language($lang)->field($field)->firstOrNew();
+
+        $variantTranslation->tour_variant_id    = $variant->id;
+        $variantTranslation->language           = $lang;
+        $variantTranslation->field              = $field;
+        $variantTranslation->translation        = $translation;
+        $variantTranslation->save();
     }
 }
