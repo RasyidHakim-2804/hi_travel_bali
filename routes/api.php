@@ -64,7 +64,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
     Route::post('/articles/{article}/comments', [ArticleCommentController::class, 'store']);
 
     //Cars
-    Route::post('/cars', [CarController::class, 'list']);
+    Route::get('/cars', [CarController::class, 'list']);
 
     //Location
     Route::get('/locations', [LocationController::class, 'all']);
