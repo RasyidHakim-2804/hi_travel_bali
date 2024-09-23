@@ -17,7 +17,7 @@ class AdminCarController extends Controller
 
     public function index()
     {
-        $cars = Car::paginate(25);
+        $cars = Car::orderBy('id', 'DESC')->paginate(25);
 
         return CarResource::collection($cars);
     }
