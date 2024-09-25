@@ -42,7 +42,7 @@ class AdminTourResource extends JsonResource
                 )
             ),
             
-            'variants'      => AdminTourVariantResource::collection($this->whenLoaded('variants')),
+            'variants'      => TourVariantResource::collection($this->whenLoaded('variants')),
 
             'locations'     => LocationResource::collection($this->whenLoaded('locations')),
         ];
