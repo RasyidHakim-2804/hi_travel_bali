@@ -18,15 +18,15 @@ class TourVariantResource extends JsonResource
             'id'            => $this->id,
             'tour_id'       => $this->tour_id,
             'is_default'    => $this->is_default,
+            'name'          => $this->name,
             'price'         => $this->price,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
 
-            'description' => $this->when(
-                $this->translations->isNotEmpty(),
-                fn() => $this->translations->where('field','description')->first()->translation,
-                null
-            ),
+            'description' => $this->translations
+                            ->where('field', 'description')
+                            ->pluck('translation')
+                            ->first(),
         ];
     }
 }
