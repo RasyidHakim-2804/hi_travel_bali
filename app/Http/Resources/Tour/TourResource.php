@@ -28,15 +28,15 @@ class TourResource extends JsonResource
                 $this->price
             ),
 
-            'description' => $this->whenLoaded(
-                'translations',
-                fn() => $this->translations->where('field','description')->first()->translation
-            ),
+            'description' => $this->translations
+                            ->where('field', 'description')
+                            ->pluck('translation')
+                            ->first(),
 
-            'meta' => $this->whenLoaded(
-                'translations',
-                fn() => $this->translations->where('field','meta')->first()->translation
-            ),
+            'meta'      => $this->translations
+                            ->where('field', 'meta')
+                            ->pluck('translation')
+                            ->first(),
             
             'images'          => TourImageResource::collection($this->whenLoaded('images')),
             'thumbnail_image' => new TourImageResource($this->whenLoaded('thumbnailImage')),
