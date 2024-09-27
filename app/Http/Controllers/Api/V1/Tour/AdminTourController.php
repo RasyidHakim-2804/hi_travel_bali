@@ -19,7 +19,9 @@ class AdminTourController extends Controller
     public function index()
     {
         return AdminTourResource::collection(
-            Tour::orderBy('id', 'DESC')->selectThumbnailVariantPrice()->paginate(25)
+            Tour::orderBy('id', 'DESC')
+            ->selectThumbnailVariantPrice()
+            ->paginate(25)
         );
     }
 
@@ -45,7 +47,6 @@ class AdminTourController extends Controller
 
             $tour               = new Tour();
             $tour->name         = $request->name;
-            $tour->max_person   = $request->max_person;
             $tour->is_active    = $request->is_active;
             $tour->is_varied    = $request->is_varied;
             $tour->save();
@@ -168,6 +169,7 @@ class AdminTourController extends Controller
     {
         $variant              = $tour->variants()->where('is_default', '=', true)->firstOrNew();
         $variant->name        = $tour->name;
+        $variant->max_person  = $request->max_person;
         $variant->price       = $request->price;
         $variant->tour_id     = $tour->id;
         $variant->is_default  = true;
@@ -191,6 +193,7 @@ class AdminTourController extends Controller
             }
 
             $variant->name        = $tour->name;
+            $variant->max_person  = $request->max_person;
             $variant->price       = $requestVariant['price'];
             $variant->tour_id     = $tour->id;
             $variant->is_default  = false;
