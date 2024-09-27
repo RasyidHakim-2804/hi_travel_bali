@@ -19,7 +19,7 @@ class AdminTourController extends Controller
     public function index()
     {
         return AdminTourResource::collection(
-            Tour::selectThumbnailVariantPrice()->paginate(25)
+            Tour::orderBy('id', 'DESC')->selectThumbnailVariantPrice()->paginate(25)
         );
     }
 
