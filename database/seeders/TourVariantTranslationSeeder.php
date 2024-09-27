@@ -24,8 +24,8 @@ class TourVariantTranslationSeeder extends Seeder
                 $description['id']  = 'Peserta tur dari umur 11 tahun keatas.';
                 $description['en']  = 'Tour participants from age 11 and over.';
             } else {
-                $description['en']  = 'Peserta tur daari umur 1-10 tahun';
-                $description['id']  = 'Tour participants from 1-10 years old';
+                $description['id']  = 'Peserta tur daari umur 1-10 tahun';
+                $description['en']  = 'Tour participants from 1-10 years old';
             }
 
             DB::table('tour_variant_translations')->insert([
