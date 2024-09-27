@@ -27,7 +27,6 @@ class TourController extends Controller
                     AllowedSort::field('recomended', 'max_person'),
                 ])
                 ->allowedFilters([
-                    AllowedFilter::scope('tourist_numbers'),
                     AllowedFilter::scope('location_id')
                 ])
                 ->with([
@@ -35,6 +34,7 @@ class TourController extends Controller
                     'locations',
                 ])
                 ->selectThumbnailVariantPrice()
+                ->selectThumbnailVariantMaxPerson()
                 ->active()
                 ->paginate(25);
 
@@ -63,6 +63,7 @@ class TourController extends Controller
                 'locations',
             ])
             ->selectThumbnailVariantPrice()
+            ->selectThumbnailVariantMaxPerson()
             ->active()
             ->orderBy('id', 'DESC')
             ->limit(4)
