@@ -22,6 +22,7 @@ class TourVariantSeeder extends Seeder
             DB::table('tour_variants')->insert([
                 'tour_id'       => $tour_id,
                 'name'          => 'Dewasa',
+                'max_person'    => 4,
                 'is_default'    => 0,
                 'price'         => rand(300000, 400000),
                 'created_at'    => now(),
@@ -31,6 +32,7 @@ class TourVariantSeeder extends Seeder
             DB::table('tour_variants')->insert([
                 'tour_id'       => $tour_id,
                 'name'          => 'Anak',
+                'max_person'    => 4,
                 'is_default'    => 0,
                 'price'         => rand(300000, 400000),
                 'created_at'    => now(),

@@ -30,7 +30,6 @@ class TourSeeder extends Seeder
                 'id'            => $tour_id,
                 'name'          => $name,
                 'slug'          => Str::slug($name),
-                'max_person'    => 4,
                 'is_active'     => 1,
                 'is_varied'     => 1,
                 'created_at'    => now(),
