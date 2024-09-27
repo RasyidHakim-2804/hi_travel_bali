@@ -40,6 +40,7 @@ class TourRequest extends FormRequest
             'variants'                => 'exclude_if:is_varied,false|required|array',
             'variants.*'              => 'exclude_if:is_varied,false|required|array',
             'variants.*.name'         => 'exclude_if:is_varied,false|required|string|max:50',
+            'variants.*.max_person'   => 'exclude_if:is_varied,false|required|numeric|min:1',
             'variants.*.price'        => 'exclude_if:is_varied,false|required|numeric|max:100000000|min:0',
             'variants.*.descriptions' => 'exclude_if:is_varied,false|required|array'
         ];
