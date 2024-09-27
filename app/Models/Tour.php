@@ -70,15 +70,17 @@ class Tour extends Model
         ));
     }
 
+    public function scopeSelectThumbnailVariantMaxPerson($query)
+    {
+        $query->addSelect('*',DB::raw(
+            "(select max_person from tour_variants where tour_id = tours.id and deleted_at is null order by max_person asc limit 1) as max_person"
+        ));
+    }
+
     public function scopeLocationId(Builder $query, $location_id)
     {
         $query->whereHas('locations', function(Builder $query) use($location_id) {
             $query->where('location_id', '=', $location_id);
         });
-    }
-
-    public function scopeTouristNumbers(Builder $query, $person)
-    {
-        return $query->where('max_person', '>=', $person);
     }
 }
