@@ -19,6 +19,7 @@ class AdminTourVariantResource extends JsonResource
             'tour_id'       => $this->tour_id,
             'is_default'    => $this->is_default,
             'name'          => $this->name,
+            'max_person'    => $this->max_person,
             'price'         => $this->price,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
