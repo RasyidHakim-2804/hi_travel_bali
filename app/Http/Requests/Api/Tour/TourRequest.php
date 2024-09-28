@@ -46,7 +46,7 @@ class TourRequest extends FormRequest
         ];
 
         foreach (Language::code() as $lang) {
-            $rule['description.' . $lang]               = 'required|string|max:1500';
+            $rule['description.' . $lang]               = 'required|string';
             $rule['meta.' . $lang]                      = 'required|string|max:200';
             $rule['variants.*.descriptions.' . $lang]   = 'required|string|max:200';
         }
