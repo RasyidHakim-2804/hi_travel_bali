@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class UserWelcomeNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
     protected $data;
 

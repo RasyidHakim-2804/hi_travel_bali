@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class ForgetAdminPasswordNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
     private $translations = [
         'en' => [
@@ -45,10 +45,12 @@ class ForgetAdminPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $translations = $this->translations[app()->getLocale()];
+
         return (new MailMessage)
                     ->subject('Admin Forget Password Pin')
                     ->greeting('Hi ' . $this->name . ',')
-                    ->line($this->getTranslations('line_1'))
+                    ->line($translations['line_1'])
                     ->line('# ' . $this->pin);
     }
 

@@ -11,7 +11,7 @@ use Illuminate\Support\HtmlString;
 
 class UserForgetPasswordPinNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
     protected $data;
 

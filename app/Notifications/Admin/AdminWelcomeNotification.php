@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class AdminWelcomeNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
     private $translations = [
         'en' => [
@@ -49,9 +49,11 @@ class AdminWelcomeNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $translations = $this->translations[app()->getLocale()];
+
         return (new MailMessage)
                     ->subject(env('APP_EMAIL_COMPANY') . ' - Welcome to Bali Boat')
-                    ->line($this->getTranslations('line_1'))
+                    ->line($translations['line_1'])
                     ->action('Login', $this->loginUrl);
     }
 

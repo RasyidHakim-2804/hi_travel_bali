@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class AdminEmailChangesVerificationNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
     private $translations = [
         'en' => [
@@ -52,11 +52,12 @@ class AdminEmailChangesVerificationNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $translations = $this->translations[app()->getLocale()];
         return (new MailMessage)
                     ->subject(env('APP_EMAIL_COMPANY') . ' - Admin Email Changes')
                     ->greeting('Hi ' . $this->firstName . ',')
-                    ->line($this->getTranslations('line_1'))
-                    ->action($this->getTranslations('button'), url('/'));
+                    ->line($translations['line_1'])
+                    ->action($translations['button'], url('/'));
     }
 
     /**

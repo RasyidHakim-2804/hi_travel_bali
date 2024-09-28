@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class AdminRegisterVerificationNotification extends Notification
 {
-    use Queueable, NotificationHasTranslationsTrait;
+    use Queueable;
 
     private $translations = [
         'en' => [
@@ -28,8 +28,8 @@ class AdminRegisterVerificationNotification extends Notification
     
     public function __construct($firstName, $validationUrl)
     {
-        $this->firstName;
-        $this->validationUrl;
+        $this->firstName        = $firstName;
+        $this->validationUrl    = $validationUrl;
     }
 
     /**
@@ -51,11 +51,12 @@ class AdminRegisterVerificationNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $translations = $this->translations[app()->getLocale()];
         return (new MailMessage)
                     ->subject(env('APP_EMAIL_COMPANY') . ' - Admin Regitration')
                     ->greeting('Hi ' . $this->firstName . ',')
-                    ->line($this->getTranslations('line_1'))
-                    ->action($this->getTranslations('button'), $this->validationUrl);
+                    ->line($translations['line_1'])
+                    ->action($translations['button'], $this->validationUrl);
     }
 
     /**
