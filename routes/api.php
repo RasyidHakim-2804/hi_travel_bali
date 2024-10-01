@@ -63,6 +63,7 @@ Route::prefix('/v1')->middleware('verifyLanguage')->group(function () {
 
     //Cars
     Route::get('/cars', [CarController::class, 'list']);
+    Route::get('/cars/{car:slug}', [CarController::class, 'show']);
 
     //Location
     Route::get('/locations', [LocationController::class, 'all']);
