@@ -26,7 +26,7 @@ class TourRequest extends FormRequest
         $rule = [
             'name'          => 'required|string|max:255',
             'price'         => 'exclude_if:is_varied,true|required|numeric|max:100000000|min:0',
-            'max_person'    => 'required|numeric|min:1',
+            'max_person'    => 'exclude_if:is_varied,true|required|integer|min:1',
             'is_active'     => 'required|boolean',
 
             'description'   => 'required|array',
