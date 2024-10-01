@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Resources\Car;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Facility\DetailFacilityResource;
+
+class DetailCarResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
+    public function toArray($request)
+    {
+        return [
+            'id'            => $this->id,
+            'name'          => $this->name,
+            'slug'          => $this->slug,
+            'price'         => $this->price,
+            'is_active'     => $this->is_active,
+            'max_person'    => $this->max_person,
+            'image'         => $this->imageUrl('image'),
+            
+            $this->mergeWhen(($this->trip_price != null), [
+                'trip_price'  => $this->trip_price,
+            ]),
+
+            'facilities'    => DetailFacilityResource::collection($this->whenLoaded('facilities')),
+        ];
+    }
+}
