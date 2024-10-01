@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Api\V1\Car;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Car\CarResource;
+use App\Http\Resources\Car\DetailCarResource;
 use App\Models\Car;
+use App\Traits\JsonResponsesTrait;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CarController extends Controller
 {
+    use JsonResponsesTrait;
+
     public function list()
     {
         $cars = QueryBuilder::for(Car::class)
@@ -30,5 +34,16 @@ class CarController extends Controller
                 ->paginate(25);
         
         return CarResource::collection($cars);
+    }
+
+    public function show(Car $car)
+    {
+        $car = $car->load([
+            'facilities.translations'
+        ]);
+
+        return $this->successGet(
+            new DetailCarResource($car)
+        );
     }
 }
