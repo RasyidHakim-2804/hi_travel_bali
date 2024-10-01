@@ -191,8 +191,8 @@ class AdminTourController extends Controller
                 $variant = new TourVariant();
             }
 
-            $variant->name        = $tour->name;
-            $variant->max_person  = $request->max_person;
+            $variant->name        = $requestVariant['name'];
+            $variant->max_person  = $requestVariant['max_person'];
             $variant->price       = $requestVariant['price'];
             $variant->tour_id     = $tour->id;
             $variant->is_default  = false;
