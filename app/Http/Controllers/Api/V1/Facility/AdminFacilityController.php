@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1\Facility;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Facility\FacilityRequest;
-use App\Http\Resources\Facility\AdminDetailFacilityResource;
+use App\Http\Resources\Facility\DetailFacilityResource;
 use App\Http\Resources\Facility\ListFacilityResource;
 use App\Models\Facility;
 use App\Services\Images\ImageService;
@@ -45,7 +45,7 @@ class AdminFacilityController extends Controller
         $facility = $facility->load('translations');
         
         return $this->successGet(
-            new AdminDetailFacilityResource($facility)
+            new DetailFacilityResource($facility)
         );
     }
 
