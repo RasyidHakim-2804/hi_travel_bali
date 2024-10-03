@@ -65,9 +65,17 @@ class Tour extends Model
 
     public function scopeSelectThumbnailVariantPrice($query)
     {
-        $query->addSelect('*',DB::raw(
-            "(select price from tour_variants where tour_id = tours.id and deleted_at is null order by price asc limit 1) as price"
-        ));
+        if (app()->getLocale() == 'id') {
+            $query->addSelect('*',DB::raw(
+                "(select price from tour_variants where tour_id = tours.id and deleted_at is null order by price asc limit 1) as price"
+            ));
+        } else {
+            $query->addSelect('*',DB::raw(
+                "(select usd_price from tour_variants where tour_id = tours.id and deleted_at is null order by price asc limit 1) as price"
+            ));
+        }
+        
+        
     }
 
     public function scopeSelectThumbnailVariantMaxPerson($query)
