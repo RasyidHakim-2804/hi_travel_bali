@@ -21,11 +21,6 @@ class TourController extends Controller
     public function list()
     {
         $tours = QueryBuilder::for(Tour::class)
-                ->defaultSort('max_person')
-                ->allowedSorts([
-                    AllowedSort::field('price'),
-                    AllowedSort::field('recomended', 'max_person'),
-                ])
                 ->allowedFilters([
                     AllowedFilter::scope('location_id')
                 ])
