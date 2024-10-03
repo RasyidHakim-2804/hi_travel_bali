@@ -24,6 +24,10 @@ class AdminTourResource extends JsonResource
                 fn() => $this->defaultVariant->price,
                 $this->price
             ),
+            'usd_price'     => $this->whenLoaded(
+                'defaultVariant',
+                fn() => $this->defaultVariant->usd_price,
+            ),
             'max_person'    => $this->whenLoaded(
                 'defaultVariant',
                 fn() => $this->defaultVariant->max_person,

@@ -20,6 +20,7 @@ class TourVariantResource extends JsonResource
             'is_default'    => $this->is_default,
             'name'          => $this->name,
             'price'         => $this->price,
+            'usd_price'     => $this->usd_price,
             'max_person'    => $this->max_person,
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
