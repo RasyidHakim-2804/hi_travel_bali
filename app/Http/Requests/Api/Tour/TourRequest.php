@@ -26,6 +26,7 @@ class TourRequest extends FormRequest
         $rule = [
             'name'          => 'required|string|max:255',
             'price'         => 'exclude_if:is_varied,true|required|numeric|max:100000000|min:0',
+            'usd_price'     => 'exclude_if:is_varied,true|required|numeric|max:100000000|min:0',
             'max_person'    => 'exclude_if:is_varied,true|required|integer|min:1',
             'is_active'     => 'required|boolean',
 
@@ -42,6 +43,7 @@ class TourRequest extends FormRequest
             'variants.*.name'         => 'exclude_if:is_varied,false|required|string|max:50',
             'variants.*.max_person'   => 'exclude_if:is_varied,false|required|numeric|min:1',
             'variants.*.price'        => 'exclude_if:is_varied,false|required|numeric|max:100000000|min:0',
+            'variants.*.usd_price'    => 'exclude_if:is_varied,false|required|numeric|max:100000000|min:0',
             'variants.*.descriptions' => 'exclude_if:is_varied,false|required|array'
         ];
 
