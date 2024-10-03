@@ -20,6 +20,7 @@ class CarResource extends JsonResource
             'name'          => $this->name,
             'slug'          => $this->slug,
             'price'         => $this->price,
+            'usd_price'     => $this->usd_price,
             'is_active'     => $this->is_active,
             'max_person'    => $this->max_person,
             'image'         => $this->imageUrl('image'),
