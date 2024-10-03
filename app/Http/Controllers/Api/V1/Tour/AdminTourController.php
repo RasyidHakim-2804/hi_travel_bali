@@ -170,6 +170,7 @@ class AdminTourController extends Controller
         $variant->name        = $tour->name;
         $variant->max_person  = $request->max_person;
         $variant->price       = $request->price;
+        $variant->usd_price   = $request->usd_price;
         $variant->tour_id     = $tour->id;
         $variant->is_default  = true;
         $variant->save();
@@ -194,6 +195,7 @@ class AdminTourController extends Controller
             $variant->name        = $requestVariant['name'];
             $variant->max_person  = $requestVariant['max_person'];
             $variant->price       = $requestVariant['price'];
+            $variant->usd_price   = $requestVariant['usd_price'];
             $variant->tour_id     = $tour->id;
             $variant->is_default  = false;
             $variant->save();
