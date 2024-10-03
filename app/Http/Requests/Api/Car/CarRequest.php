@@ -24,6 +24,7 @@ class CarRequest extends FormRequest
         $rule = [
             'name'       => 'required|string|max:255',
             'price'      => 'required|numeric|max:100000000|min:0',
+            'usd_price'  => 'required|numeric|max:100000000|min:0',
             'is_active'  => 'required|boolean',
             'image'      => 'required|image|max:2048|mimes:png,jpg,jpeg',
             'max_person' => 'required|numeric|min:1|max:100',
