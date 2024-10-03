@@ -52,9 +52,17 @@ class Car extends Model
             throw new Exception('the distance cannot be smaller than 1');
         }
 
-        $query->select(
-            '*',
-            DB::raw('price * ' . $distance . ' as trip_price')
-        );
+        if (app()->getLocale() == 'en') {
+            $query->select(
+                '*',
+                DB::raw('usd_price * ' . $distance . ' as trip_price')
+            );
+        } else {
+            $query->select(
+                '*',
+                DB::raw('price * ' . $distance . ' as trip_price')
+            );
+        }
+        
     }
 }
