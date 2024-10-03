@@ -41,6 +41,7 @@ class AdminCarController extends Controller
             $car                = new Car();
             $car->name          = $request->name;
             $car->price         = $request->price;
+            $car->usd_price     = $request->usd_price;
             $car->is_active     = $request->is_active;
             $car->max_person    = $request->max_person;
             $car->image         = $this->setImage($car, $request->image);
@@ -65,6 +66,7 @@ class AdminCarController extends Controller
         try {
             $car->name          = $request->name;
             $car->price         = $request->price;
+            $car->usd_price     = $request->usd_price;
             $car->is_active     = $request->is_active;
             $car->max_person    = $request->max_person;
 
